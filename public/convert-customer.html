@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Convert to Customer - TAXMIS</title>
+  <link rel="stylesheet" href="/public/css/styles.css">
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f4f4f4;
+      margin: 0;
+      padding: 20px;
+    }
+    .container {
+      max-width: 600px;
+      margin: 40px auto;
+      background: white;
+      padding: 30px;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+    h2 {
+      text-align: center;
+      color: #ff6600;
+      margin-bottom: 30px;
+    }
+    label {
+      display: block;
+      margin-bottom: 5px;
+      font-weight: bold;
+    }
+    input, select {
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 20px;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+    }
+    button {
+      background: #0056b3;
+      color: white;
+      border: none;
+      padding: 12px 20px;
+      border-radius: 4px;
+      cursor: pointer;
+      width: 100%;
+      font-size: 16px;
+    }
+    button:hover {
+      background: #003d80;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>TAXMIS Customer Conversion</h2>
+    <form id="conversionForm">
+      <label for="documentName">Document Name:</label>
+      <input type="text" id="documentName" name="documentName" required>
+      
+      <label for="documents">Upload Documents (PDF, DOC, Images):</label>
+      <input type="file" id="documents" name="documents" accept=".pdf,.doc,.docx,image/*" multiple required>
+      
+      <label for="employee">Assigned Employee:</label>
+      <select id="employee" name="employee" required>
+        <option value="Nisha">Nisha</option>
+        <option value="Arnab">Arnab</option>
+        <option value="Ramesh">Ramesh</option>
+      </select>
+      
+      <label for="deliveryDate">Date of Delivery:</label>
+      <input type="date" id="deliveryDate" name="deliveryDate" required>
+      
+      <button type="submit" id="submit">Convert to Customer</button>
+    </form>
+  </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      // Get the lead ID from the URL
+      const urlParts = window.location.pathname.split('/');
+      const leadId = urlParts[urlParts.length - 1];
+      
+      document.getElementById('conversionForm').addEventListener('submit', async function(event) {
+        event.preventDefault();
+        document.getElementById("submit").innerHTML = "Working on it";
+        
+        document.getElementById("submit").disabled = true;
+        
+        
+        const documentName = document.getElementById('documentName').value;
+        const fileInput = document.getElementById('documents');
+        const employee = document.getElementById('employee').value;
+        const deliveryDate = document.getElementById('deliveryDate').value;
+        
+        // Convert the files to Base64
+        const files = fileInput.files;
+        const base64Files = [];
+
+        const readFile = (file) => {
+          return new Promise((resolve, reject) => {
+            const reader = new FileReader();
+            reader.onloadend = () => {
+              const base64String = reader.result.split(',')[1]; // Get the Base64 string
+              resolve(base64String);
+            };
+            reader.onerror = reject;
+            reader.readAsDataURL(file); // Read the file as a data URL
+          });
+        };
+
+        // Read all files and convert to Base64
+        for (let i = 0; i < files.length; i++) {
+          const base64String = await readFile(files[i]);
+          base64Files.push(base64String);
+        }
+
+        // Send the Base64 strings to the server
+        const response = await fetch(`/convert-customer/${leadId}`, {
+ method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            documentName: documentName,
+            employee: employee,
+            deliveryDate: deliveryDate,
+            documents: base64Files // Send the array of Base64 strings
+          }),
+        });
+        document.getElementById("submit").innerHTML = "Submit";
+        document.getElementById("submit").disabled = false;
+
+        if (response.ok) {
+          window.location.href = '/dashboard'; // Redirect on success
+        } else {
+          alert('Error converting to customer');
+        }
+      });
+    });
+  </script>
+</body>
+</html>

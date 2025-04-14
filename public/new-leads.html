@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>New Leads Form - TAXMIS</title>
+  <link rel="stylesheet" href="/public/css/styles.css">
+  <style>
+    body {
+      display: flex;
+      margin: 0;
+      min-height: 100vh;
+    }
+    form {
+      width: 100%;
+      max-width: 800px;
+      margin: 0 auto;
+      background: white;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+    .form-row {
+      display: flex;
+      flex-wrap: wrap;
+      margin-bottom: 15px;
+      gap: 20px;
+    }
+    .form-group {
+      flex: 1;
+      min-width: 250px;
+    }
+    label {
+      display: block;
+      margin-bottom: 5px;
+      font-weight: bold;
+    }
+    input, select, textarea {
+      width: 100%;
+      padding: 8px;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+    }
+    button {
+      background: #0056b3;
+      color: white;
+      border: none;
+      padding: 10px 15px;
+      border-radius: 4px;
+      cursor: pointer;
+      margin-top: 20px;
+    }
+    .service-item {
+      display: flex;
+      align-items: center;
+      margin-bottom: 10px;
+      background: #f8f8f8;
+      padding: 10px;
+      border-radius: 4px;
+    }
+    .service-item button {
+      margin-left: 10px;
+      margin-top: 0;
+      background: #dc3545;
+    }
+  </style>
+</head>
+<body>
+  <div class="sidebar">
+    <h2>Lead Details</h2>
+    <ul>
+      <li onclick="location.href='/dashboard'">Dashboard</li>
+      <li onclick="location.href='/new-leads'" style="background: #ff6600;">New Leads</li>
+      <li onclick="location.href='/customers'">Customer</li>
+      <li onclick="location.href='/add-services'">Add Services</li>
+    </ul>
+  </div>
+  
+  <div class="main-content">
+    <div class="header">
+      <h2>Add New Lead</h2>
+      <a href="/logout" class="logout-btn">Logout</a>
+    </div>
+    
+    <form id="newLeadForm">
+      <div class="form-row">
+        <div class="form-group">
+          <label for="customerName">Customer Name:</label>
+          <input type="text" id="customerName" name="customerName" required>
+        </div>
+        <div class="form-group">
+          <label for="mobile">Mobile No:</label>
+          <input type="tel" id="mobile" name="mobile" required>
+        </div>
+      </div>
+      
+      <div class="form-row">
+        <div class="form-group">
+          <label for="fatherName">Father's Name:</label>
+          <input type="text" id="fatherName" name="fatherName">
+        </div>
+        <div class="form-group">
+          <label for="spouseName">Spouse Name:</label>
+          <input type="text" id="spouseName" name="spouseName">
+        </div>
+      </div>
+      
+      <div class="form-row">
+        <div class="form-group">
+          <label for="motherName">Mother's Name:</label>
+          <input type="text" id="motherName" name="motherName">
+        </div>
+        <div class="form-group">
+          <label for="aadhar">Aadhar Card No:</label>
+          <input type="text" id="aadhar" name="aadhar">
+        </div>
+      </div>
+      
+      <div class="form-row">
+        <div class="form-group">
+          <label for="pan">PAN No:</label>
+          <input type="text" id="pan" name="pan">
+        </div>
+        <div class="form-group">
+          <label for="company">Company Name:</label>
+          <input type="text" id="company" name="company">
+        </div>
+      </div>
+      
+      <div class="form-row">
+        <div class="form-group">
+          <label for="email">Email ID:</label>
+          <input type="email" id="email" name="email" required>
+        </div>
+        <div class="form-group">
+          <label for="gst">GST No:</label>
+          <input type="text" id="gst" name="gst">
+        </div>
+      </div>
+      
+      <div class="form-row">
+        <div class="form-group">
+          <label for="cin">CIN No:</label>
+          <input type="text" id="cin" name="cin">
+        </div>
+      </div>
+      
+      <div class="form-row">
+        <div class="form-group">
+          <label for="services">Add Services:</label>
+          <select id="services" name="services">
+            <option value="GST Filing">GST Filing</option>
+            <option value="Company Registration">Company Registration</option>
+            <option value="Tax Consultancy">Tax Consultancy</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="servicePrice">Service Price:</label>
+          <input type="number" id="servicePrice" name="servicePrice" min="0" step="0.01">
+        </div>
+        <div class="form-group" style="flex-basis: 100%; margin-top: 10px;">
+          <button type="button" onclick="addService()">Add Service</button>
+        </div>
+      </div>
+      
+      <div id="selectedServices"></div>
+      
+      <div class="form-row">
+        <div class="form-group" style="flex-basis: 100%;">
+          <label for="note">Note:</label>
+          <textarea id="note" name="note" rows="3"></textarea>
+        </div>
+      </div>
+      
+      <button type="submit">Submit Lead</button>
+    </form>
+  </div>
+
+  <script>
+    let services = [];
+    
+    function addService() {
+      const serviceSelect = document.getElementById('services');
+      const priceInput = document.getElementById('servicePrice');
+      
+      if (!priceInput.value || isNaN(priceInput.value)) {
+        alert('Please enter a valid price');
+        return;
+      }
+      
+      const service = {
+        name: serviceSelect.options[serviceSelect.selectedIndex].text,
+        price: parseFloat(priceInput.value).toFixed(2)
+      };
+      
+      services.push(service);
+      updateServiceDisplay();
+      priceInput.value = '';
+    }
+    
+    function removeService(index) {
+      services.splice(index, 1);
+      updateServiceDisplay();
+    }
+    
+    function updateServiceDisplay() {
+      const container = document.getElementById('selectedServices');
+      container.innerHTML = '';
+      
+      services.forEach((service, index) => {
+        const div = document.createElement('div');
+        div.className = 'service-item';
+        div.innerHTML = `
+          <span>${service.name} - ₹${service.price}</span>
+          <button type="button" onclick="removeService(${index})">Remove</button>
+        `;
+        container.appendChild(div);
+      });
+    }
+    
+    document.getElementById('newLeadForm').addEventListener('submit', async function(e) {
+      e.preventDefault();
+      
+      if (services.length === 0) {
+        alert('Please add at least one service');
+        return;
+      }
+      
+      try {
+        const formData = new FormData(this);
+        const customer = {};
+        
+        for (const [key, value] of formData.entries()) {
+          customer[key] = value;
+        }
+        
+        const submissionData = {
+          customer: customer,
+          services: services
+        };
+        
+        const response = await fetch('/submit', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(submissionData)
+        });
+        
+        if (!response.ok) {
+          const errorData = await response.json();
+          throw new Error(errorData.message || 'Server error');
+        }
+        
+        alert('Lead added successfully!');
+        this.reset();
+        services = [];
+        updateServiceDisplay();
+        
+      } catch (error) {
+        console.error('Error:', error);
+        alert(`Failed to add lead: ${error.message}`);
+      }
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Customers - TAXMIS</title>
+  <link rel="stylesheet" href="/public/css/styles.css">
+  <style>
+    body {
+      display: flex;
+      margin: 0;
+      min-height: 100vh;
+    }
+    .customer-image {
+      max-width: 100px;
+      max-height: 100px;
+      cursor: pointer;
+    }
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 1;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      overflow: auto;
+      background-color: rgba(0,0,0,0.7);
+    }
+    .modal-content {
+      margin: 5% auto;
+      display: block;
+      max-width: 80%;
+      max-height: 80%;
+    }
+    .close {
+      position: absolute;
+      top: 15px;
+      right: 35px;
+      color: #f1f1f1;
+      font-size: 40px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <div class="sidebar">
+    <h2>Lead Details</h2>
+    <ul>
+      <li onclick="location.href='/dashboard'">Dashboard</li>
+      <li onclick="location.href='/new-leads'">New Leads</li>
+      <li onclick="location.href='/customers'" style="background: #ff6600;">Customer</li>
+      <li onclick="location.href='/add-services'">Add Services</li>
+    </ul>
+  </div>
+  
+  <div class="main-content">
+    <div class="header">
+      <h2>Customer Management</h2>
+      <a href="/logout" class="logout-btn">Logout</a>
+    </div>
+    
+    <table>
+      <tr>
+        <th>Name</th>
+        <th>Mobile</th>
+        <th>Email</th>
+        <th>Task</th>
+        <th>Total Price</th>
+        <th>Document</th>
+        <th>Assigned To</th>
+        <th>Delivery Date</th>
+        <th>Action</th>
+      </tr>
+      <tbody id="customers-table-body">
+        <!-- Table rows will be populated by JavaScript -->
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Image modal -->
+  <div id="imageModal" class="modal">
+    <span class="close">&times;</span>
+    <img class="modal-content" id="modalImage">
+  </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', async function() {
+  try {
+    document.getElementById('customers-table-body').innerHTML = `
+          <tr>
+            <td colspan="7" style="text-align: center; padding: 20px;">
+              <h3>Working on it.</h3>
+            </td>
+          </tr>
+        `;
+    const response = await fetch('/api/customers');
+    if (!response.ok) {
+      throw new Error('Failed to fetch customers');
+    }
+    
+    const customers = await response.json();
+    if (customers.length === 0){
+          document.getElementById('customers-table-body').innerHTML = `
+          <tr>
+            <td colspan="7" style="text-align: center; padding: 20px;">
+              <h3>Nothing To Show Here.</h3>
+            </td>
+          </tr>
+        `;
+        }
+        else{
+          document.getElementById('customers-table-body').innerHTML = ``;
+        }
+    const tableBody = document.getElementById('customers-table-body');
+    
+    customers.forEach(customer => {
+      const services = typeof customer.services === 'string' ? JSON.parse(customer.services) : customer.services;
+      const documents = typeof customer.documents === 'string' ? JSON.parse(customer.documents) : customer.documents;
+      
+      let docDisplay = '';
+      if (documents && documents.length > 0) {
+        docDisplay = documents.map((doc, index) => `
+          <a href="${doc.path}" target="_blank" class="document-link">View Document ${index + 1}</a>
+        `).join(', ');
+      }
+      
+      const row = document.createElement('tr');
+      row.innerHTML = `
+        <td>${customer.customer_name}</td>
+        <td>${customer.mobile}</td>
+        <td>${customer.email}</td>
+        <td>${services.map(ser => ser.name).join(', ')}</td>
+        <td>₹${services.reduce((acc, cur) => acc + parseFloat(cur.price), 0).toFixed(2)}</td>
+        <td>${docDisplay}</td>
+        <td>${customer.assigned_to || 'Not Assigned'}</td>
+        <td>${formatDate(customer.delivery_date)}</td>
+        <td class="action-buttons">
+          <button class="edit-btn" onclick="location.href='/edit/${customer.id}'">Edit</button>
+          <button class="delete-btn" onclick="if(confirm('Are you sure?')) location.href='/delete/${customer.id}'">Delete</button>
+          <button class="details-btn" onclick="location.href='/details-customer/${customer.id}'">Show Details</button>
+        </td>
+      `;
+      tableBody.appendChild(row);
+    });
+  } catch (error) {
+    console.error('Error fetching customers:', error);
+    document.getElementById('customers-table-body').innerHTML = `
+      <tr>
+        <td colspan="8" style="text-align: center; padding: 20px;">
+          <h3>Sorry, our servers are busy! Please refresh the page.</h3>
+        </td>
+      </tr>
+    `;
+  }
+});
+    function formatDate(dateString) {
+      if (!dateString) return 'Not Set';
+      const date = new Date(dateString);
+      return date.toLocaleDateString();
+    }
+
+    function showImage(src) {
+      const modal = document.getElementById('imageModal');
+      const modalImg = document.getElementById('modalImage');
+      modal.style.display = "block";
+      modalImg.src = src;
+    }
+
+    // Close the modal
+    document.querySelector('.close').onclick = function() {
+      document.getElementById('imageModal').style.display = "none";
+    }
+  </script>
+</body>
+</html>

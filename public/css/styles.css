@@ -1,0 +1,105 @@
+body { 
+  font-family: Arial, sans-serif; 
+  background-color: #f4f4f4; 
+}
+.sidebar { 
+  width: 250px; 
+  background: #0056b3; 
+  color: white; 
+  padding: 20px; 
+  display: flex; 
+  flex-direction: column; 
+}
+.sidebar h2 { 
+  text-align: center; 
+  margin-bottom: 20px; 
+}
+.sidebar ul { 
+  list-style: none; 
+  padding: 0;
+}
+.sidebar ul li { 
+  padding: 10px; 
+  margin: 5px 0; 
+  background: #003d80; 
+  border-radius: 5px; 
+  cursor: pointer; 
+  text-align: center; 
+}
+.sidebar ul li:hover { 
+  background: #ff6600; 
+}
+.main-content { 
+  flex: 1; 
+  padding: 20px; 
+}
+.header { 
+  display: flex; 
+  justify-content: space-between; 
+  align-items: center; 
+  margin-bottom: 20px; 
+}
+.header h2 { 
+  color: #ff6600; 
+}
+table { 
+  width: 100%; 
+  background: white; 
+  border-collapse: collapse; 
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); 
+}
+th, td { 
+  padding: 10px; 
+  text-align: left; 
+  border-bottom: 1px solid #ddd; 
+}
+th { 
+  background: #0056b3; 
+  color: white; 
+}
+.logout-btn { 
+  background: #dc3545; 
+  color: white; 
+  padding: 8px 15px; 
+  border-radius: 5px; 
+  text-decoration: none; 
+  position: absolute; 
+  top: 20px; 
+  right: 20px; 
+}
+.form-container { 
+  background: white; 
+  padding: 20px; 
+  border-radius: 5px; 
+  margin: 20px; 
+}
+.form-group { 
+  margin-bottom: 15px; 
+}
+.container {
+  max-width: 800px;
+  margin: 20px auto;
+  padding: 20px;
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0,0,0,0.1);
+}
+.edit-btn, .delete-btn, .customer-btn {
+  padding: 5px 10px;
+  margin: 2px;
+  border: none;
+  border-radius: 3px;
+  cursor: pointer;
+}
+.edit-btn {
+  background: #0056b3;
+  color: white;
+}
+.delete-btn {
+  background: #dc3545;
+  color: white;
+}
+.customer-btn {
+  background: #28a745;
+  color: white;
+}
