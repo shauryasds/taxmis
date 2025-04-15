@@ -356,9 +356,8 @@ app.get('/delete/:id', requireAuth, async (req, res) => {
       });
     });
 
-    if (!lead || !lead.documents) {
-      return res.status(404).send('Lead not found or no documents to delete');
-    }
+    if (lead && lead.documents) {
+      
 
     // Step 2: Parse the documents and delete them from Cloudinary
     const documents = JSON.parse(lead.documents);
@@ -375,11 +374,11 @@ app.get('/delete/:id', requireAuth, async (req, res) => {
           return null; // Return null for failed deletions
         });
     });
-
+  
     const deleteResults = await Promise.all(deletePromises); // Wait for all deletions to complete
-
-    // Log results of deletions
     console.log('Delete results:', deleteResults);
+    // Log results of deletions
+  }
 
     // Step 3: Delete the lead from the database
     db.query('DELETE FROM leads WHERE id = ?', [req.params.id], (err) => {
