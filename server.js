@@ -386,11 +386,29 @@ app.get('/delete/:id', requireAuth, async (req, res) => {
         console.error('Database error:', err);
         return res.status(500).send('Error deleting lead');
       }
-      res.status(200).send('Lead and associated documents deleted successfully');
+      res.status(200).send(`
+<html>
+<body style="background-color: white; color: blue; text-align: center; font-family: Arial, sans-serif;">
+  <h1 style="color: blue;">Successfully Deleted</h1>
+  <button onclick="window.location.href='/dashboard'" style="background-color: blue; color: white; border: none; padding: 10px 20px; font-size: 16px; cursor: pointer; border-radius: 5px;">
+    Visit Dashboard
+  </button>
+</body>
+</html>
+`);
     });
   } catch (error) {
     console.error('Error deleting lead:', error);
-    res.status(500).send('Error deleting lead');
+    res.status(500).send(`
+<html>
+<body style="background-color: white; color: blue; text-align: center; font-family: Arial, sans-serif;">
+  <h1 style="color: blue;">Error deleting lead</h1>
+  <button onclick="window.location.href='/dashboard'" style="background-color: blue; color: white; border: none; padding: 10px 20px; font-size: 16px; cursor: pointer; border-radius: 5px;">
+    Visit Dashboard
+  </button>
+</body>
+</html>
+`);
   }
 });
 
