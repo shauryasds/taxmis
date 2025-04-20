@@ -243,6 +243,42 @@ app.post('/update/:id', requireAuth, async (req, res) => {
 
     // Handle document uploads if converting to customer
     if (isCustomer) {
+      const [lead] = await new Promise((resolve, reject) => {
+        db.query('SELECT documents FROM leads WHERE id = ?', [req.params.id], (err, result) => {
+          if (err) {
+            return reject(err);
+          }
+          resolve(result);
+        });
+      });
+  
+      if (lead && lead.documents) {
+        
+  
+      // Step 2: Parse the documents and delete them from Cloudinary
+      const documents = JSON.parse(lead.documents);
+      const deletePromises = documents.map(doc => {
+        const publicId = doc.path.split('/').pop().split('.')[0]; // Extract public ID from URL
+        console.log(publicId);
+        return cloudinary.uploader.destroy(publicId)
+          .then(result => {
+            console.log(`Deleted ${publicId}:`, result);
+            return result;
+          })
+          .catch(err => {
+            console.error(`Error deleting ${publicId}:`, err);
+            return null; // Return null for failed deletions
+          });
+      });
+    
+      const deleteResults = await Promise.all(deletePromises); // Wait for all deletions to complete
+      console.log('Delete results:', deleteResults);
+      // Log results of deletions
+    }
+
+
+
+
       const uploadPromises = documents.map(doc => {
         const mimeType = getMimeType(doc);
         return cloudinary.uploader.upload(`data:${mimeType};base64,${doc}`, {
