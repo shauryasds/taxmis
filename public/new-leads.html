@@ -301,9 +301,9 @@ button[type="submit"]:hover {
         <div class="form-group">
           <label for="services">Add Services:</label>
           <select id="services" name="services">
+            
             <option value="GST Filing">GST Filing</option>
-            <option value="Company Registration">Company Registration</option>
-            <option value="Tax Consultancy">Tax Consultancy</option>
+            
           </select>
         </div>
         <div class="form-group">
@@ -330,7 +330,90 @@ button[type="submit"]:hover {
 
   <script>
     let services = [];
+    function allservices(){
+      let allservice=[
+    "PAN Correction",
+    "PAN Application",
+    "TAN Application",
+    "PF Transfer",
+    "PF Withdrawal",
+    "PF KYC",
+    "PF Return",
+    "ESI Return",
+    "Income Tax Return",
+    "Financial Statement Preparation",
+    "Company Formation",
+    "Post Incorporation Services",
+    "Annual Compliance",
+    "LLP Formation",
+    "Partnership Firm Registration",
+    "Trust Registration",
+    "80G Application",
+    "12A Application",
+    "Darpan Registration",
+    "GST Registration",
+    "GSTR-1",
+    "GSTR-3B",
+    "CMP-08",
+    "GST Closure",
+    "GST Final Return",
+    "GST Amendment",
+    "Rent Agreement",
+    "Affidavit",
+    "Notary Services",
+    "Sale Agreement",
+    "Sale Deed",
+    "Rectification Deed",
+    "Gift Deed",
+    "MOU",
+    "Discharge Deed",
+    "DTD-Deposit of Title Deed",
+    "HUF-Deed",
+    "Partition Deed",
+    "Partnership Deed",
+    "Amendment in Partnership Deed",
+    "FSSAI Registration",
+    "ISO Certification",
+    "Karnataka Shop and Establishment Registration",
+    "UDYAM",
+    "Trade Licence",
+    "Auditing",
+    "RWA Formation",
+    "School Establishment",
+    "Professional Tax Registration",
+    "PF Registration",
+    "ESI Registration",
+    "Legal Verification of Property",
+    "Khata Transfer",
+    "Khata Making",
+    "EC Application",
+    "Trademark Registration",
+    "Passport Services",
+    "BESCOM Name Transfer",
+    "PSARA Licence",
+    "Import Export Code",
+    "Name Change Services",
+    "RERA Licence",
+    "TDS Payment 26QB",
+    "TDS Return for NRI Cases",
+    "Form 15CA/CB",
+    "Digital Signature",
+    "Estamp Services",
+    "Marriage Registration",
+    "Project Report",
+    "Aadhar Changes"
+];
+      let service = document.getElementById('services');
+      allservice.forEach((s)=>{
+        const option = document.createElement('option');
+            option.value = s; 
+            option.textContent=s;
+            service.appendChild(option);
+      })
     
+
+    }
+    allservices()
     function addService() {
       const serviceSelect = document.getElementById('services');
       const priceInput = document.getElementById('servicePrice');
