@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Add Services - TAXMIS</title>
+  <link rel="stylesheet" href="/admin/css/styles.css">
+  <style>
+    body {
+      display: flex;
+      margin: 0;
+      min-height: 100vh;
+    }
+    .services-container {
+      width: 100%;
+      max-width: 800px;
+      margin: 0 auto;
+      background: white;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+    .service-form {
+      margin-bottom: 30px;
+    }
+    .form-row {
+      display: flex;
+      flex-wrap: wrap;
+      margin-bottom: 15px;
+      gap: 20px;
+    }
+    .form-group {
+      flex: 1;
+      min-width: 250px;
+    }
+    label {
+      display: block;
+      margin-bottom: 5px;
+      font-weight: bold;
+    }
+    input, select {
+      width: 100%;
+      padding: 8px;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+    }
+    button {
+      background: #0056b3;
+      color: white;
+      border: none;
+      padding: 10px 15px;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+    .services-list {
+      margin-top: 30px;
+    }
+    .service-item {
+      background: #f8f8f8;
+      padding: 15px;
+      margin-bottom: 10px;
+      border-radius: 4px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .delete-btn {
+      background: #dc3545;
+      color: white;
+      border: none;
+      padding: 5px 10px;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <div class="sidebar">
+    <h2>Lead Details</h2>
+    <ul>
+      <li onclick="location.href='/dashboard'">Dashboard</li>
+      <li onclick="location.href='/new-leads'">New Leads</li>
+      <li onclick="location.href='/customers'">Customer</li>
+      <li onclick="location.href='/add-services'" style="background: #ff6600;">Add Services</li>
+    </ul>
+  </div>
+  
+  <div class="main-content">
+    <div class="header">
+      <h2>Services Management</h2>
+      <a href="/logout" class="logout-btn">Logout</a>
+    </div>
+    
+    <div class="services-container">
+      <div class="service-form">
+        <h3>Add New Service</h3>
+        <form id="addServiceForm">
+          <div class="form-row">
+            <div class="form-group">
+              <label for="serviceName">Service Name:</label>
+              <input type="text" id="serviceName" name="serviceName" required>
+            </div>
+            <div class="form-group">
+              <label for="serviceCategory">Category:</label>
+              <select id="serviceCategory" name="serviceCategory">
+                <option value="Tax">Tax</option>
+                <option value="Legal">Legal</option>
+                <option value="Registration">Registration</option>
+                <option value="Accounting">Accounting</option>
+                <option value="Other">Other</option>
+              </select>
+            </div>
+          </div>
+          
+          <div class="form-row">
+            <div class="form-group">
+              <label for="basePrice">Base Price:</label>
+              <input type="number" id="basePrice" name="basePrice" min="0" step="0.01" required>
+            </div>
+            <div class="form-group">
+              <label for="serviceDescription">Description:</label>
+              <input type="text" id="serviceDescription" name="serviceDescription">
+            </div>
+          </div>
+          
+          <button type="submit">Add Service</button>
+        </form>
+      </div>
+      
+      <div class="services-list">
+        <h3>Available Services</h3>
+        <div id="servicesList">
+          <!-- Service items will be added here -->
+          <div class="service-item">
+            <div>
+              <strong>GST Filing</strong>
+              <p>Category: Tax | Base Price: ₹1000.00</p>
+            </div>
+            <button class="delete-btn">Delete</button>
+          </div>
+          <div class="service-item">
+            <div>
+              <strong>Company Registration</strong>
+              <p>Category: Registration | Base Price: ₹5000.00</p>
+            </div>
+            <button class="delete-btn">Delete</button>
+          </div>
+          <div class="service-item">
+            <div>
+              <strong>Tax Consultancy</strong>
+              <p>Category: Tax | Base Price: ₹2000.00</p>
+            </div>
+            <button class="delete-btn">Delete</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    document.getElementById('addServiceForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      
+      const serviceName = document.getElementById('serviceName').value;
+      const serviceCategory = document.getElementById('serviceCategory').value;
+      const basePrice = document.getElementById('basePrice').value;
+      const description = document.getElementById('serviceDescription').value;
+      
+      // Here you would normally send this data to your backend API
+      // For now, we'll just add it to the list for demonstration
+      
+      const servicesList = document.getElementById('servicesList');
+      const newService = document.createElement('div');
+      newService.className = 'service-item';
+      newService.innerHTML = `
+        <div>
+          <strong>${serviceName}</strong>
+          <p>Category: ${serviceCategory} | Base Price: ₹${parseFloat(basePrice).toFixed(2)}</p>
+          ${description ? `<p>Description: ${description}</p>` : ''}
+        </div>
+        <button class="delete-btn">Delete</button>
+      `;
+      
+      servicesList.prepend(newService);
+      
+      // Add event listener to the delete button
+      newService.querySelector('.delete-btn').addEventListener('click', function() {
+        if (confirm('Are you sure you want to delete this service?')) {
+          newService.remove();
+        }
+      });
+      
+      // Reset the form
+      document.getElementById('addServiceForm').reset();
+    });
+    
+    // Add event listeners to existing delete buttons
+    document.querySelectorAll('.delete-btn').forEach(button => {
+      button.addEventListener('click', function() {
+        if (confirm('Are you sure you want to delete this service?')) {
+          this.closest('.service-item').remove();
+        }
+      });
+    });
+  </script>
+</body>
+</html>

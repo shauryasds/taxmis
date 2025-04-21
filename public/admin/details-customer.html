@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Customer Details</title>
+    <link rel="stylesheet" href="/admin/css/styles.css">
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f4f7fa;
+            color: #333;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 50px auto;
+            padding: 20px;
+            border: 1px solid #007BFF;
+            border-radius: 8px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            background-color: #fff;
+        }
+
+        h1 {
+            color: #007BFF;
+            text-align: center;
+            margin-bottom: 20px;
+            font-size: 24px;
+            font-weight: bold;
+        }
+
+        .customer-detail {
+            margin: 10px 0;
+            padding: 15px;
+            border: 1px solid #007BFF;
+            border-radius: 5px;
+            background-color: #f9f9f9;
+            transition: background-color 0.3s;
+        }
+
+        .customer-detail:hover {
+            background-color: #e9f5ff;
+        }
+
+        .document-link {
+            display: block;
+            margin: 5px 0;
+            color: #007BFF;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .document-link:hover {
+            color: #0056b3;
+            text-decoration: underline;
+        }
+
+        .loading-message {
+            text-align: center;
+            padding: 20px;
+            font-size: 18px;
+            color: #555;
+        }
+
+        .no-data-message {
+            text-align: center;
+            padding: 20px;
+            font-size: 18px;
+            color: #d9534f; /* Bootstrap danger color */
+        }
+
+        @media (max-width: 600px) {
+            .container {
+                padding: 15px;
+            }
+
+            h1 {
+                font-size: 20px;
+            }
+
+            .customer-detail {
+                padding: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Customer Details</h1>
+        <div id="customer-info"></div>
+    </div>
+    <script>
+        async function fetchCustomerData() {
+            document.getElementById('customer-info').innerHTML = `
+                <div style="text-align: center; padding: 20px;">
+                    <h3>Loading...</h3>
+                </div>
+            `;
+   
+            const urlParts = window.location.pathname.split('/');
+            const customerId = urlParts[urlParts.length - 1]; // Extract ID from URL
+            const response = await fetch(`/api/lead/${customerId}`);
+            
+            if (response.ok) {
+                const lead = await response.json();
+                if (!lead || Object.keys(lead).length === 0) {
+                    document.getElementById('customer-info').innerHTML = `
+                        <div style="text-align: center; padding: 20px;">
+                            <h3>Nothing To Show Here.</h3>
+                        </div>
+                    `;
+                } else {
+                    displayCustomerData(lead);
+                }
+            } else {
+                console.error('Failed to fetch customer data');
+                document.getElementById('customer-info').innerHTML = `
+                    <div style="text-align: center; padding: 20px;">
+                        <h3>Failed to load customer data.</h3>
+                    </div>
+                `;
+            }
+        }
+
+        function displayCustomerData(lead) {
+            const customerInfoDiv = document.getElementById('customer-info');
+            
+            // Parse the documents string into an object
+            const documents = lead.documents ? JSON.parse(lead.documents) : [];
+            
+            let documentLinks = '';
+            if (documents.length > 0) {
+                documentLinks = documents.map((doc, index) => `
+                    <a href="${doc.path}" target="_blank" class="document-link">View Document ${index + 1}</a>
+                `).join('');
+            } else {
+                documentLinks = 'N/A';
+            }
+
+            customerInfoDiv.innerHTML = `
+                <div class="customer-detail"><strong>ID:</strong> ${lead.id || 'N/A'}</div>
+                <div class="customer-detail"><strong>Name:</strong> ${lead.customer_name || 'N/A'}</div>
+                <div class="customer-detail"><strong>Mobile:</strong> ${lead.mobile || 'N/A'}</div>
+                <div class="customer-detail"><strong>Father's Name:</strong> ${lead.father_name || 'N /A'}</div>
+                <div class="customer-detail"><strong>Spouse's Name:</strong> ${lead.spouse_name || 'N/A'}</div>
+                <div class="customer-detail"><strong>Mother's Name:</strong> ${lead.mother_name || 'N/A'}</div>
+                <div class="customer-detail"><strong>Aadhar:</strong> ${lead.aadhar || 'N/A'}</div>
+                <div class="customer-detail"><strong>PAN:</strong> ${lead.pan || 'N/A'}</div>
+                <div class="customer-detail"><strong>Company Name:</strong> ${lead.company_name || 'N/A'}</div>
+                <div class="customer-detail"><strong>Email:</strong> ${lead.email || 'N/A'}</div>
+                <div class="customer-detail"><strong>GST:</strong> ${lead.gst || 'N/A'}</div>
+                <div class="customer-detail"><strong>CIN:</strong> ${lead.cin || 'N/A'}</div>
+                <div class="customer-detail"><strong>Note:</strong> ${lead.note || 'N/A'}</div>
+                <div class="customer-detail"><strong>Assigned To:</strong> ${lead.assigned_to || 'N/A'}</div>
+                <div class="customer-detail"><strong>Delivery Date:</strong> ${lead.delivery_date ? new Date(lead.delivery_date).toLocaleDateString() : 'N/A'}</div>
+                <div class="customer-detail"><strong>Created At:</strong> ${lead.created_at ? new Date(lead.created_at).toLocaleDateString() : 'N/A'}</div>
+                <div class="customer-detail"><strong>Is Customer:</strong> ${lead.is_customer ? 'Yes' : 'No'}</div>
+                <div class="customer-detail"><strong>Documents:</strong> ${documentLinks}</div>
+                <div class="customer-detail"><strong>Services:</strong> ${lead.services && lead.services.length > 0 ? lead.services.map(service => `${service.name} - $${service.price}`).join(', ') : 'N/A'}</div>
+            `;
+        }
+        fetchCustomerData();
+    </script>
+</body>
+</html>
+</html>

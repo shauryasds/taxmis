@@ -15,7 +15,7 @@ const port = process.env.PORT || 8000;
 app.use(bodyParser.json({ limit: '10mb' }));
 
 app.use(express.json());
-app.use('/public', express.static(path.join(__dirname, 'public')));
+// app.use('/public', express.static(path.join(__dirname, 'public')));
 
 // Middleware
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -95,11 +95,13 @@ const requireAuth = (req, res, next) => {
 
 // Routes
 app.get('/', (req, res) => {
-  res.sendFile(path.join(__dirname, 'public', 'index.html'));
+  // return res.redirect("/hi")
+  res.sendFile(path.join(__dirname, 'public', 'Frontend-website', 'index.html'));
 });
 
-app.get('/login', (req, res) => {
-  res.sendFile(path.join(__dirname, 'public', 'login.html'));
+
+app.get('/login', (req, res) => {console.log(path.join(__dirname, 'public','admin', 'login.html'))
+  res.sendFile(path.join(__dirname, 'public','admin', 'login.html'));
 });
 
 app.post('/login', (req, res) => {
@@ -113,32 +115,32 @@ app.post('/login', (req, res) => {
 });
 
 app.get('/dashboard', requireAuth, (req, res) => {
-  res.sendFile(path.join(__dirname, 'public', 'dashboard.html'));
+  res.sendFile(path.join(__dirname, 'public','admin', 'dashboard.html'));
 });
 
 app.get('/new-leads', requireAuth, (req, res) => {
-  res.sendFile(path.join(__dirname, 'public', 'new-leads.html'));
+  res.sendFile(path.join(__dirname, 'public','admin', 'new-leads.html'));
 });
 
 app.get('/customers', requireAuth, (req, res) => {
-  res.sendFile(path.join(__dirname, 'public', 'customers.html'));
+  res.sendFile(path.join(__dirname, 'public','admin', 'customers.html'));
 });
 
 app.get('/add-services', requireAuth, (req, res) => {
-  res.sendFile(path.join(__dirname, 'public', 'add-services.html'));
+  res.sendFile(path.join(__dirname, 'public','admin', 'add-services.html'));
 });
 
 app.get('/convert-customer/:id', requireAuth, (req, res) => {
-  res.sendFile(path.join(__dirname, 'public', 'convert-customer.html'));
+  res.sendFile(path.join(__dirname, 'public','admin', 'convert-customer.html'));
 });
 app.get('/details-customer/:id', requireAuth, (req, res) => {
   
-  res.sendFile(path.join(__dirname, 'public', 'details-customer.html'));
+  res.sendFile(path.join(__dirname, 'public','admin', 'details-customer.html'));
 });
 
 
 app.get('/edit/:id', requireAuth, (req, res) => {
-  res.sendFile(path.join(__dirname, 'public', 'edit-lead.html'));
+  res.sendFile(path.join(__dirname, 'public','admin', 'edit-lead.html'));
 });
 
 // API endpoints
