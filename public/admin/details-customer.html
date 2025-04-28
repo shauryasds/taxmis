@@ -15,9 +15,9 @@
         }
 
         .container {
-            max-width: 600px;
+            max-width: 800px;
             margin: 50px auto;
-            padding: 20px;
+            padding: 30px;
             border: 1px solid #007BFF;
             border-radius: 8px;
             box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
@@ -27,14 +27,14 @@
         h1 {
             color: #007BFF;
             text-align: center;
-            margin-bottom: 20px;
-            font-size: 24px;
+            margin-bottom: 30px;
+            font-size: 28px;
             font-weight: bold;
         }
 
         .customer-detail {
-            margin: 10px 0;
-            padding: 15px;
+            margin: 15px 0;
+            padding: 20px;
             border: 1px solid #007BFF;
             border-radius: 5px;
             background-color: #f9f9f9;
@@ -58,31 +58,17 @@
             text-decoration: underline;
         }
 
-        .loading-message {
-            text-align: center;
-            padding: 20px;
-            font-size: 18px;
-            color: #555;
-        }
-
-        .no-data-message {
-            text-align: center;
-            padding: 20px;
-            font-size: 18px;
-            color: #d9534f; /* Bootstrap danger color */
-        }
-
         @media (max-width: 600px) {
             .container {
-                padding: 15px;
+                padding: 20px;
             }
 
             h1 {
-                font-size: 20px;
+                font-size: 24px;
             }
 
             .customer-detail {
-                padding: 10px;
+                padding: 15px;
             }
         }
     </style>
@@ -141,10 +127,10 @@
             }
 
             customerInfoDiv.innerHTML = `
-                <div class="customer-detail"><strong>ID:</strong> ${lead.id || 'N/A'}</div>
+                <div class="customer-detail "><strong>ID:</strong> ${lead.id || 'N/A'}</div>
                 <div class="customer-detail"><strong>Name:</strong> ${lead.customer_name || 'N/A'}</div>
                 <div class="customer-detail"><strong>Mobile:</strong> ${lead.mobile || 'N/A'}</div>
-                <div class="customer-detail"><strong>Father's Name:</strong> ${lead.father_name || 'N /A'}</div>
+                <div class="customer-detail"><strong>Father's Name:</strong> ${lead.father_name || 'N/A'}</div>
                 <div class="customer-detail"><strong>Spouse's Name:</strong> ${lead.spouse_name || 'N/A'}</div>
                 <div class="customer-detail"><strong>Mother's Name:</strong> ${lead.mother_name || 'N/A'}</div>
                 <div class="customer-detail"><strong>Aadhar:</strong> ${lead.aadhar || 'N/A'}</div>
@@ -159,11 +145,14 @@
                 <div class="customer-detail"><strong>Created At:</strong> ${lead.created_at ? new Date(lead.created_at).toLocaleDateString() : 'N/A'}</div>
                 <div class="customer-detail"><strong>Is Customer:</strong> ${lead.is_customer ? 'Yes' : 'No'}</div>
                 <div class="customer-detail"><strong>Documents:</strong> ${documentLinks}</div>
-                <div class="customer-detail"><strong>Services:</strong> ${lead.services && lead.services.length > 0 ? lead.services.map(service => `${service.name} - $${service.price}`).join(', ') : 'N/A'}</div>
+                <div class="customer-detail"><strong>Services:</strong> ${lead.services && lead.services.length > 0 ? lead.services.map(service => `${service.name} - ₹${service.price}`).join(', ') : 'N/A'}</div>
+                <div class="customer-detail"><strong>Client Name:</strong> ${lead.clientname || 'N/A'}</div>
+                <div class="customer-detail"><strong>Client Mobile Number:</strong> ${lead.clientmobilenumber || 'N/A'}</div>
+                <div class="customer-detail"><strong>Client Email:</strong> ${lead.clientemail || 'N/A'}</div>
+                <div class="customer-detail"><strong>Credentials:</strong> ${lead.credentials ? JSON.parse(lead.credentials).map(cred => `URL: ${cred.url}, Username: ${cred.username}, Password: ${cred.password}`).join('<br>') : 'N/A'}</div>
             `;
         }
         fetchCustomerData();
     </script>
 </body>
-</html>
 </html>

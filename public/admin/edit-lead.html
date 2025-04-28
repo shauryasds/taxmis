@@ -1,346 +1,524 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Edit Lead - TAXMIS</title>
-  <link rel="stylesheet" href="/admin/css/styles.css">
-  <style>
-    body {
-      display: flex;
-      margin: 0;
-      min-height: 100vh;
-    }
-    form {
-      width: 100%;
-      max-width: 800px;
-      margin: 0 auto;
-      background: white;
-      padding: 20px;
-      border-radius: 8px;
-      box-shadow: 0 0 10px rgba(0,0,0,0.1);
-    }
-    .form-row {
-      display: flex;
-      flex-wrap: wrap;
-      margin-bottom: 15px;
-      gap: 20px;
-    }
-    .form-group {
-      flex: 1;
-      min-width: 250px;
-    }
-    label {
-      display: block;
-      margin-bottom: 5px;
-      font-weight: bold;
-    }
-    input, select, textarea {
-      width: 100%;
-      padding: 8px;
-      border: 1px solid #ddd;
-      border-radius: 4px;
-    }
-    button {
-      background: #0056b3;
-      color: white;
-      border: none;
-      padding: 10px 15px;
-      border-radius: 4px;
-      cursor: pointer;
-      margin-top: 20px;
-    }
-    .service-item {
-      display: flex;
-      align-items: center;
-      margin-bottom: 10px;
-      background: #f8f8f8;
-      padding: 10px;
-      border-radius: 4px;
-    }
-    .service-item button {
-      margin-left: 10px;
-      margin-top: 0;
-      background: #dc3545;
-    }
-  </style>
-</head>
-<body>
-  <div class="sidebar">
-    <h2>Lead Details</h2>
-    <ul>
-      <li onclick="location.href='/dashboard'">Dashboard</li>
-      <li onclick="location.href='/new-leads'">New Leads</li>
-      <li onclick="location.href='/customers'">Customer</li>
-      <li onclick="location.href='/add-services'">Add Services</li>
-    </ul>
-  </div>
-  
-  <div class="main-content">
-    <div class="header">
-      <h2>Edit Lead</h2>
-      <a href="/logout" class="logout-btn">Logout</a>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Edit Lead - TAXMIS</title>
+    <link rel="stylesheet" href="/admin/css/styles.css" />
+    <style>
+      body {
+        display: flex;
+        margin: 0;
+        min-height: 100vh;
+      }
+      form {
+        width: 100%;
+        max-width: 800px;
+        margin: 0 auto;
+        background: white;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      }
+      .form-row {
+        display: flex;
+        flex-wrap: wrap;
+        margin-bottom: 15px;
+        gap: 20px;
+      }
+      .form-group {
+        flex: 1;
+        min-width: 250px;
+      }
+      label {
+        display: block;
+        margin-bottom: 5px;
+        font-weight: bold;
+      }
+      input,
+      select,
+      textarea {
+        width: 100%;
+        padding: 8px;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+      }
+      button {
+        background: #0056b3;
+        color: white;
+        border: none;
+        padding: 10px 15px;
+        border-radius: 4px;
+        cursor: pointer;
+        margin-top: 20px;
+      }
+      .service-item {
+        display: flex;
+        align-items: center;
+        margin-bottom: 10px;
+        background: #f8f8f8;
+        padding: 10px;
+        border-radius: 4px;
+      }
+      .service-item button {
+        margin-left: 10px;
+        margin-top: 0;
+        background: #dc3545;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="sidebar">
+      <h2>Lead Details</h2>
+      <ul>
+        <li onclick="location.href='/dashboard'">Dashboard</li>
+        <li onclick="location.href='/new-leads'">New Leads</li>
+        <li onclick="location.href='/customers'">Customer</li>
+        <li onclick="location.href='/add-services'">Add Services</li>
+      </ul>
     </div>
-    
-    <form id="editLeadForm">
-      <div class="form-row">
-        <div class="form-group">
-          <label for="customerName">Customer Name:</label>
-          <input type="text" id="customerName" name="customerName" required>
-        </div>
-        <div class="form-group">
-          <label for="mobile">Mobile No:</label>
-          <input type="tel" id="mobile" name="mobile" required>
-        </div>
-      </div>
-      
-      <div class="form-row">
-        <div class="form-group">
-          <label for="fatherName">Father's Name:</label>
-          <input type="text" id="fatherName" name="fatherName">
-        </div>
-        <div class="form-group">
-          <label for="spouseName">Spouse Name:</label>
-          <input type="text" id="spouseName" name="spouseName">
-        </div>
-      </div>
-      
-      <div class="form-row">
-        <div class="form-group">
-          <label for="motherName">Mother's Name:</label>
-          <input type="text" id="motherName" name="motherName">
-        </div>
-        <div class="form-group">
-          <label for="aadhar">Aadhar Card No:</label>
-          <input type="text" id="aadhar" name="aadhar">
-        </div>
-      </div>
-      
-      <div class="form-row">
-        <div class="form-group">
-          <label for="pan">PAN No:</label>
-          <input type="text" id="pan" name="pan">
-        </div>
-        <div class="form-group">
-          <label for="company">Company Name:</label>
-          <input type="text" id="company" name="company">
-        </div>
-      </div>
-      
-      <div class="form-row">
-        <div class="form-group">
-          <label for="email">Email ID:</label>
-          <input type="email" id="email" name="email" required>
-        </div>
-        <div class="form-group">
-          <label for="gst">GST No:</label>
-          <input type="text" id="gst" name="gst">
-        </div>
-      </div>
-      
-      <div class="form-row">
-        <div class="form-group">
-          <label for="cin">CIN No:</label>
-          <input type="text" id="cin" name="cin">
-        </div>
-      </div>
-      
-      <div class="form-row">
-        <div class="form-group">
-          <label for="services">Add Services:</label>
-          <select id="services" name="services">
-            <option value="GST Filing">GST Filing</option>
-            <option value="Company Registration">Company Registration</option>
-            <option value="Tax Consultancy">Tax Consultancy</option>
-          </select>
-        </div>
-        <div class="form-group">
-          <label for="servicePrice">Service Price:</label>
-          <input type="number" id="servicePrice" name="servicePrice" min="0" step="0.01">
-        </div>
-        <div class="form-group" style="flex-basis: 100%; margin-top: 10px;">
-          <button type="button" onclick="addService()">Add Service</button>
-        </div>
-      </div>
-      
-      <div id="selectedServices"></div>
-      
-      <div class="form-row">
-        <div class="form-group" style="flex-basis: 100%;">
-          <label for="note">Note:</label>
-          <textarea id="note" name="note" rows="3"></textarea>
-        </div>
+
+    <div class="main-content">
+      <div class="header">
+        <h2>Edit Lead</h2>
+        <a href="/logout" class="logout-btn">Logout</a>
       </div>
 
-      <div class="form-row" id="customerDetails" style="display: none;">
-        <div class="form-group">
-          <label for="documents">Documents:</label>
-          <input type="file" id="documents" name="documents" accept=".pdf,image/*" multiple>
+      <form id="editLeadForm">
+        <div class="form-row">
+          <div class="form-group">
+            <label for="customerName">Customer Name:</label>
+            <input type="text" id="customerName" name="customerName" required />
+          </div>
+          <div class="form-group">
+            <label for="mobile">Mobile No:</label>
+            <input type="tel" id="mobile" name="mobile" required />
+          </div>
         </div>
-        <div class="form-group">
-          <label for="assignedTo">Assigned Employee:</label>
-          <input type="text" id="assignedTo" name="assignedTo">
-        </div>
-        <div class="form-group">
-          <label for="deliveryDate">Date of Delivery:</label>
-          <input type="date" id="deliveryDate" name="deliveryDate">
-        </div>
-      </div>
-      
-      <button type="submit">Update Lead</button>
-    </form>
-  </div>
 
-  <script>
-    let services = [];
-    let leadId;
-    
-    document.addEventListener('DOMContentLoaded', async function() {
-      try {
-        const urlParts = window.location.pathname.split('/');
-        leadId = urlParts[urlParts.length - 1];
-        
-        const response = await fetch(`/api/lead/${leadId}`);
-        if (!response.ok) {
-          throw new Error('Failed to fetch lead data');
+        <div class="form-row">
+          <div class="form-group">
+            <label for="fatherName">Father's Name:</label>
+            <input type="text" id="fatherName" name="fatherName" />
+          </div>
+          <div class="form-group">
+            <label for="spouseName">Spouse Name:</label>
+            <input type="text" id="spouseName" name="spouseName" />
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="motherName">Mother's Name:</label>
+            <input type="text" id="motherName" name="motherName" />
+          </div>
+          <div class="form-group">
+            <label for="aadhar">Aadhar Card No:</label>
+            <input type="text" id="aadhar" name="aadhar" />
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="pan">PAN No:</label>
+            <input type="text" id="pan" name="pan" />
+          </div>
+          <div class="form-group">
+            <label for="company">Company Name:</label>
+            <input type="text" id="company" name="company" />
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="email">Email ID:</label>
+            <input type="email" id="email" name="email" required />
+          </div>
+          <div class="form-group">
+            <label for="gst">GST No:</label>
+            <input type="text" id="gst" name="gst" />
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="cin">CIN No:</label>
+            <input type="text" id="cin" name="cin" />
+          </div>
+        </div>
+        <div class="form-row" style="display: none">
+          <div class="form-group">
+            <label for="clientName">Client Name:</label>
+            <input type="text" id="clientName" name="clientName" />
+          </div>
+          <div class="form-group">
+            <label for="clientEmail">Client Email:</label>
+            <input type="email" id="clientEmail" name="clientEmail" />
+          </div>
+          <div class="form-group">
+            <label for="clientMobile">Client Mobile No:</label>
+            <input type="tel" id="clientMobile" name="clientMobile" />
+          </div>
+        </div>
+
+        <div
+          style="border: 1px dotted black; padding: 10px; margin-bottom: 25px; display: none;"  id="credential"
+        >
+          <div class="form-row" style="display: none; margin: 0">
+            <div
+              class="form-group"
+              style="display: flex; justify-content: space-between"
+            >
+              <label>Credentials:</label>
+              <button
+                type="button"
+                style="margin-top: 0"
+                onclick="addCredentialField()"
+              >
+                Add Field
+              </button>
+            </div>
+          </div>
+
+          <table
+            id="credentialsTable"
+            style="
+              width: 100%;
+              margin: 0;
+              border-collapse: collapse;
+              display: none;
+            "
+          >
+            <thead>
+              <tr>
+                <th>URL</th>
+                <th>Username</th>
+                <th>Password</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody id="credentialsBody">
+              <!-- Dynamic credential rows will be added here -->
+            </tbody>
+          </table>
+        </div>
+        <div
+          style="border: 1px dotted black; padding: 10px; margin-bottom: 25px"
+        >
+          <div class="form-row">
+            <div class="form-group">
+              <label for="services">Add Services:</label>
+              <select id="services" name="services">
+                <option value="GST Filing">GST Filing</option>
+                <option value="Company Registration">
+                  Company Registration
+                </option>
+                <option value="Tax Consultancy">Tax Consultancy</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label for="servicePrice">Service Price:</label>
+              <input
+                type="number"
+                id="servicePrice"
+                name="servicePrice"
+                min="0"
+                step="0.01"
+              />
+            </div>
+            <div class="form-group" style="flex-basis: 100%">
+              <button type="button" onclick="addService()" style="margin: 0">
+                Add Service
+              </button>
+            </div>
+          </div>
+
+          <div id="selectedServices"></div>
+        </div>
+        <div class="form-row" style="display: none">
+          <div class="form-group" style="flex-basis: 100%">
+            <label>Documents:</label>
+            <button type="button" onclick="addFileField()">Add File</button>
+          </div>
+        </div>
+
+        <div id="fileInputsContainer" style="display: none"></div>
+
+        <div class="form-row" style="margin-top: 25px">
+          <div class="form-group" style="flex-basis: 100%">
+            <label for="note">Note:</label>
+            <textarea id="note" name="note" rows="3"></textarea>
+          </div>
+        </div>
+
+        <div class="form-row" id="customerDetails" style="display: none">
+          <div class="form-group">
+            <label for="assignedTo">Assigned Employee:</label>
+            <input type="text" id="assignedTo" name="assignedTo" />
+          </div>
+          <div class="form-group">
+            <label for="deliveryDate">Date of Delivery:</label>
+            <input type="date" id="deliveryDate" name="deliveryDate" />
+          </div>
+        </div>
+
+        <button type="submit">Update Lead</button>
+      </form>
+    </div>
+
+    <script>
+      let services = [];
+      let leadId;
+      let credentials = [];
+
+      function addFileField() {
+        const fileInput = document.createElement("input");
+        fileInput.type = "file";
+        fileInput.name = "documents";
+        fileInput.accept = ".pdf,image/*";
+        fileInput.style.marginTop = "10px";
+        fileInput.required = true; // Optional: make it required if needed
+
+        const removeButton = document.createElement("button");
+        removeButton.type = "button";
+        removeButton.innerText = "Remove";
+        removeButton.onclick = function () {
+          fileInput.parentNode.remove();
+        };
+
+        const container = document.getElementById("fileInputsContainer");
+        const fileRow = document.createElement("div");
+        fileRow.appendChild(fileInput);
+        fileRow.appendChild(removeButton);
+        container.appendChild(fileRow);
+      }
+
+      function addCredentialField() {
+        const credentialRow = document.createElement("tr");
+        credentialRow.innerHTML = `
+    <td><input type="text" class="credential-url" placeholder="Enter URL"></td>
+    <td><input type="text" class="credential-username" placeholder="Enter Username"></td>
+    <td><input type="text" class="credential-password" placeholder="Enter Password"></td>
+    <td><button type="button" onclick="removeCredentialField(this)">Remove</button></td>
+  `;
+        document.getElementById("credentialsBody").appendChild(credentialRow);
+      }
+
+      function removeCredentialField(button) {
+        const row = button.parentNode.parentNode;
+        row.parentNode.removeChild(row);
+      }
+
+      document.addEventListener("DOMContentLoaded", async function () {
+        try {
+          const urlParts = window.location.pathname.split("/");
+          leadId = urlParts[urlParts.length - 1];
+
+          const response = await fetch(`/api/lead/${leadId}`);
+          if (!response.ok) {
+            throw new Error("Failed to fetch lead data");
+          }
+
+          const lead = await response.json();
+
+          document.getElementById("customerName").value = lead.customer_name;
+          document.getElementById("mobile").value = lead.mobile;
+          document.getElementById("fatherName").value = lead.father_name || "";
+          document.getElementById("spouseName").value = lead.spouse_name || "";
+          document.getElementById("motherName").value = lead.mother_name || "";
+          document.getElementById("aadhar").value = lead.aadhar || "";
+          document.getElementById("pan").value = lead.pan || "";
+          document.getElementById("company").value = lead.company_name || "";
+          document.getElementById("email").value = lead.email;
+          document.getElementById("gst").value = lead.gst || "";
+          document.getElementById("cin").value = lead.cin || "";
+          document.getElementById("note").value = lead.note || "";
+
+          if (lead.is_customer) {
+            console.log(lead);
+            // Show customer details
+
+            document.getElementById("credential").style.display = "block";
+            document.getElementById("customerDetails").style.display = "block";
+            document.getElementById("assignedTo").value =
+              lead.assigned_to || "";
+            document.getElementById("deliveryDate").value = lead.delivery_date
+              ? new Date(lead.delivery_date).toISOString().split("T")[0]
+              : "";
+
+            // Show client details section
+            document
+              .querySelector("#clientName")
+              .closest(".form-row").style.display = "flex";
+            document.querySelector("#clientName").value = lead.clientname;
+            document.querySelector("#clientEmail").value = lead.clientemail;
+            document.querySelector("#clientMobile").value =
+              lead.clientmobilenumber;
+            // Show credentials section
+
+            document
+              .querySelector('button[onclick="addCredentialField()"]')
+              .closest(".form-row").style.display = "flex";
+            document.getElementById("credentialsTable").style.display = "table";
+            let credential = JSON.parse(lead.credentials);
+            console.log(credential?.length);
+            for (let i = 0; i < credential?.length; i++) {
+              const credentialRow = document.createElement("tr");
+              credentialRow.innerHTML = `
+    <td><input type="text" class="credential-url" placeholder="Enter URL" value=${credential[i].url}></td>
+    <td><input type="text" class="credential-username" placeholder="Enter Username" value=${credential[i].username}></td>
+    <td><input type="text" class="credential-password" placeholder="Enter Password" value=${credential[i].password}></td>
+    <td><button type="button" onclick="removeCredentialField(this)">Remove</button></td>
+  `;
+              document
+                .getElementById("credentialsBody")
+                .appendChild(credentialRow);
+            }
+            // Show documents section
+            document
+              .querySelector('button[onclick="addFileField()"]')
+              .closest(".form-row").style.display = "flex";
+            document.getElementById("fileInputsContainer").style.display =
+              "block";
+          }
+
+          services =
+            typeof lead.services === "string"
+              ? JSON.parse(lead.services)
+              : lead.services;
+          updateServiceDisplay();
+        } catch (error) {
+          console.error("Error loading lead data:", error);
+          alert("Failed to load lead data. Please try refreshing the page.");
         }
-        
-        const lead = await response.json();
-        
-        document.getElementById('customerName').value = lead.customer_name;
-        document.getElementById('mobile').value = lead.mobile;
-        document.getElementById('fatherName').value = lead.father_name || '';
-        document.getElementById('spouseName').value = lead.spouse_name || '';
-        document.getElementById('motherName').value = lead.mother_name || '';
-        document.getElementById('aadhar').value = lead.aadhar || '';
-        document.getElementById('pan').value = lead.pan || '';
-        document.getElementById('company').value = lead.company_name || '';
-        document.getElementById('email').value = lead.email;
-        document.getElementById('gst').value = lead.gst || '';
-        document.getElementById('cin').value = lead.cin || '';
-        document.getElementById('note').value = lead.note || '';
-        
-        if (lead.is_customer) {
-          document.getElementById('customerDetails').style.display = 'block';
-          document.getElementById('assignedTo').value = lead.assigned_to || '';
-          document.getElementById('deliveryDate').value = lead.delivery_date ? new Date(lead.delivery_date).toISOString().split('T')[0] : '';
+      });
+
+      function addService() {
+        const serviceSelect = document.getElementById("services");
+        const priceInput = document.getElementById("servicePrice");
+
+        if (!priceInput.value || isNaN(priceInput.value)) {
+          alert("Please enter a valid price");
+          return;
         }
-        
-        services = typeof lead.services === 'string' ? JSON.parse(lead.services) : lead.services;
+
+        const service = {
+          name: serviceSelect.options[serviceSelect.selectedIndex].text,
+          price: parseFloat(priceInput.value).toFixed(2),
+        };
+
+        services.push(service);
         updateServiceDisplay();
-        
-      } catch (error) {
-        console.error('Error loading lead data:', error);
-        alert('Failed to load lead data. Please try refreshing the page.');
+        priceInput.value = "";
       }
-    });
-    
-    function addService() {
-      const serviceSelect = document.getElementById('services');
-      const priceInput = document.getElementById('servicePrice');
-      
-      if (!priceInput.value || isNaN(priceInput.value)) {
-        alert('Please enter a valid price');
-        return;
+
+      function removeService(index) {
+        services.splice(index, 1);
+        updateServiceDisplay();
       }
-      
-      const service = {
-        name: serviceSelect.options[serviceSelect.selectedIndex].text,
-        price: parseFloat(priceInput.value).toFixed(2)
-      };
-      
-      services.push(service);
-      updateServiceDisplay();
-      priceInput.value = '';
-    }
-    
-    function removeService(index) {
-      services.splice(index, 1);
-      updateServiceDisplay();
-    }
-    
-    function updateServiceDisplay() {
-      const container = document.getElementById('selectedServices');
-      container.innerHTML = '';
-      
-      services.forEach((service, index) => {
-        const div = document.createElement('div');
-        div.className = 'service-item';
-        div.innerHTML = `
+
+      function updateServiceDisplay() {
+        const container = document.getElementById("selectedServices");
+        container.innerHTML = "";
+
+        services.forEach((service, index) => {
+          const div = document.createElement("div");
+          div.className = "service-item";
+          div.innerHTML = `
           <span>${service.name} - ₹${service.price}</span>
           <button type="button" onclick="removeService(${index})">Remove</button>
         `;
-        container.appendChild(div);
-      });
-    }
-    
-   
-document.getElementById('editLeadForm').addEventListener('submit', async function(e) {
-  e.preventDefault();
-  const submitButton = document.querySelector('button[type="submit"]');
-  submitButton.innerHTML = "Working on it...";
-  submitButton.disabled = true;
+          container.appendChild(div);
+        });
+      }
 
-  try {
-    const formData = new FormData(this);
-    const customer = {};
-    const isCustomer = document.getElementById('customerDetails').style.display === 'block';
-    const files = document.getElementById('documents').files;
-    const base64Files = [];
+      document
+        .getElementById("editLeadForm")
+        .addEventListener("submit", async function (e) {
+          e.preventDefault();
+          const submitButton = document.querySelector('button[type="submit"]');
+          submitButton.innerHTML = "Working on it...";
+          submitButton.disabled = true;
 
-    // Convert files to Base64
-    const readFile = (file) => {
-      return new Promise((resolve, reject) => {
-        const reader = new FileReader();
-        reader.onloadend = () => {
-          const base64String = reader.result.split(',')[1];
-          resolve(base64String);
-        };
-        reader.onerror = reject;
-        reader.readAsDataURL(file);
-      });
-    };
+          try {
+            const formData = new FormData(this);
+            const customer = {};
+            const isCustomer =
+              document.getElementById("customerDetails").style.display ===
+              "block";
+            const files = document.querySelectorAll(
+              'input[type="file"][name="documents"]'
+            );
+            const base64Files = [];
 
-    for (let i = 0; i < files.length; i++) {
-      const base64String = await readFile(files[i]);
-      base64Files.push(base64String);
-    }
+            // Convert files to Base64
+            const readFile = (file) => {
+              return new Promise((resolve, reject) => {
+                const reader = new FileReader();
+                reader.onloadend = () => {
+                  const base64String = reader.result.split(",")[1];
+                  resolve(base64String);
+                };
+                reader.onerror = reject;
+                reader.readAsDataURL(file);
+              });
+            };
 
-    for (const [key, value] of formData.entries()) {
-      customer[key] = value;
-    }
+            for (let fileInput of files) {
+              if (fileInput.files.length > 0) {
+                const base64String = await readFile(fileInput.files[0]);
+                base64Files.push(base64String);
+              }
+            }
 
-    const submissionData = {
-      customer: customer,
-      services: services,
-      isCustomer: isCustomer,
-      documents: base64Files
-    };
+            for (const [key, value] of formData.entries()) {
+              customer[key] = value;
+            }
 
-    const response = await fetch(`/update/${leadId}`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(submissionData)
-    });
+            const credentialRows = document.querySelectorAll(
+              "#credentialsBody tr"
+            );
+            credentialRows.forEach((row) => {
+              const url = row.querySelector(".credential-url").value;
+              const username = row.querySelector(".credential-username").value;
+              const password = row.querySelector(".credential-password").value;
+              if (url && username && password) {
+                credentials.push({ url, username, password });
+              }
+            });
 
-    if (!response.ok) {
-      const errorData = await response.json();
-      throw new Error(errorData.message || 'Server error');
-    }
+            const submissionData = {
+              customer: customer,
+              services: services,
+              isCustomer: isCustomer,
+              documents: base64Files?.length>0?base64Files:[],
+              credentials: credentials,
+            };
+            console.log(submissionData)
+            const response = await fetch(`/update/${leadId}`, {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify(submissionData),
+            });
 
-    alert('Lead updated successfully!');
-    window.location.href = '/dashboard';
+            if (!response.ok) {
+              const errorData = await response.json();
+              throw new Error(errorData.message || "Server error");
+            }
 
-  } catch (error) {
-    console.error('Error:', error);
-    alert(`Failed to update lead: ${error.message}`);
-  } finally {
-    submitButton.innerHTML = "Update Lead";
-    submitButton.disabled = false;
-  }
-});
-   </script>
-</body>
+            alert("Lead updated successfully!");
+            window.location.href = "/dashboard";
+          } catch (error) {
+            console.error("Error:", error);
+            alert(`Failed to update lead: ${error.message}`);
+          } finally {
+            submitButton.innerHTML = "Update Lead";
+            submitButton.disabled = false;
+          }
+        });
+    </script>
+  </body>
 </html>

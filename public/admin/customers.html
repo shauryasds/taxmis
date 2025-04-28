@@ -121,8 +121,8 @@
       
       let docDisplay = '';
       if (documents && documents.length > 0) {
-        docDisplay = documents.map((doc, index) => `
-          <a href="${doc.path}" target="_blank" class="document-link">View Document ${index + 1}</a>
+        docDisplay = documents?.map((doc, index) => `
+          <a href="${doc?.path}" target="_blank" class="document-link">View Document ${index + 1}</a>
         `).join(', ');
       }
       
