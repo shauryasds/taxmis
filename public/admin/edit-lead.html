@@ -271,7 +271,90 @@
       let services = [];
       let leadId;
       let credentials = [];
+      function allservices(){
+      let allservice=[
+    "PAN Correction",
+    "PAN Application",
+    "TAN Application",
+    "PF Transfer",
+    "PF Withdrawal",
+    "PF KYC",
+    "PF Return",
+    "ESI Return",
+    "Income Tax Return",
+    "Financial Statement Preparation",
+    "Company Formation",
+    "Post Incorporation Services",
+    "Annual Compliance",
+    "LLP Formation",
+    "Partnership Firm Registration",
+    "Trust Registration",
+    "80G Application",
+    "12A Application",
+    "Darpan Registration",
+    "GST Registration",
+    "GSTR-1",
+    "GSTR-3B",
+    "CMP-08",
+    "GST Closure",
+    "GST Final Return",
+    "GST Amendment",
+    "Rent Agreement",
+    "Affidavit",
+    "Notary Services",
+    "Sale Agreement",
+    "Sale Deed",
+    "Rectification Deed",
+    "Gift Deed",
+    "MOU",
+    "Discharge Deed",
+    "DTD-Deposit of Title Deed",
+    "HUF-Deed",
+    "Partition Deed",
+    "Partnership Deed",
+    "Amendment in Partnership Deed",
+    "FSSAI Registration",
+    "ISO Certification",
+    "Karnataka Shop and Establishment Registration",
+    "UDYAM",
+    "Trade Licence",
+    "Auditing",
+    "RWA Formation",
+    "School Establishment",
+    "Professional Tax Registration",
+    "PF Registration",
+    "ESI Registration",
+    "Legal Verification of Property",
+    "Khata Transfer",
+    "Khata Making",
+    "EC Application",
+    "Trademark Registration",
+    "Passport Services",
+    "BESCOM Name Transfer",
+    "PSARA Licence",
+    "Import Export Code",
+    "Name Change Services",
+    "RERA Licence",
+    "TDS Payment 26QB",
+    "TDS Return for NRI Cases",
+    "Form 15CA/CB",
+    "Digital Signature",
+    "Estamp Services",
+    "Marriage Registration",
+    "Project Report",
+    "Aadhar Changes"
+];
+      let service = document.getElementById('services');
+      allservice.forEach((s)=>{
+        const option = document.createElement('option');
+            option.value = s; 
+            option.textContent=s;
+            service.appendChild(option);
+      })
+    
 
+    }
+    allservices()
       function addFileField() {
         const fileInput = document.createElement("input");
         fileInput.type = "file";
@@ -279,6 +362,13 @@
         fileInput.accept = ".pdf,image/*";
         fileInput.style.marginTop = "10px";
         fileInput.required = true; // Optional: make it required if needed
+        
+        const fileName = document.createElement("input");
+        fileName.type = "text";  
+        fileName.placeholder = "Name of file";  
+    fileName.name = "fileName";
+    fileName.style.marginTop = "10px";
+    fileName.required = true; 
 
         const removeButton = document.createElement("button");
         removeButton.type = "button";
@@ -290,6 +380,7 @@
         const container = document.getElementById("fileInputsContainer");
         const fileRow = document.createElement("div");
         fileRow.appendChild(fileInput);
+        fileRow.appendChild(fileName);
         fileRow.appendChild(removeButton);
         container.appendChild(fileRow);
       }
@@ -450,8 +541,11 @@
             const files = document.querySelectorAll(
               'input[type="file"][name="documents"]'
             );
+            const filesname = document.querySelectorAll(
+              'input[type="text"][name="fileName"]'
+            );
             const base64Files = [];
-
+            const fileNames = [];
             // Convert files to Base64
             const readFile = (file) => {
               return new Promise((resolve, reject) => {
@@ -469,8 +563,18 @@
               if (fileInput.files.length > 0) {
                 const base64String = await readFile(fileInput.files[0]);
                 base64Files.push(base64String);
+                
               }
             }
+            
+            filesname.forEach(f => {
+              // console.log(f.value.length,f.value,'inside loop')
+              if (f.value.length > 0) {
+                fileNames.push(f.value);
+                
+              }
+            });
+            console.log(fileNames)
 
             for (const [key, value] of formData.entries()) {
               customer[key] = value;
@@ -493,6 +597,7 @@
               services: services,
               isCustomer: isCustomer,
               documents: base64Files?.length>0?base64Files:[],
+              fileNames:fileNames,
               credentials: credentials,
             };
             console.log(submissionData)

@@ -230,12 +230,14 @@ app.post("/submit", (req, res) => {
     });
   });
 });
+// ,
 
-app.post("/update/:id", requireAuth, async (req, res) => {
+app.post("/update/:id",requireAuth,  async (req, res) => {
   const {
     customer,
     services,
     documents = [],
+    fileNames=[],
     isCustomer,
     credentials = [],
   } = req.body;
@@ -284,9 +286,10 @@ app.post("/update/:id", requireAuth, async (req, res) => {
 
       if (documents?.length > 0) {
         // Step 2: Parse the documents and delete them from Cloudinary
-        const documents = JSON.parse(lead.documents);
-        const deletePromises = documents.map((doc) => {
-          const publicId = doc.path.split("/").pop().split(".")[0]; // Extract public ID from URL
+        const document = JSON.parse(lead.documents);
+        console.log(document,"document")
+        const deletePromises = document.map((doc) => {
+          const publicId = doc?.path?.split("/").pop().split(".")[0]; // Extract public ID from URL
           console.log(publicId);
           return cloudinary.uploader
             .destroy(publicId)
@@ -303,9 +306,11 @@ app.post("/update/:id", requireAuth, async (req, res) => {
         const deleteResults = await Promise.all(deletePromises); // Wait for all deletions to complete
         console.log("Delete results:", deleteResults);
         // Log results of deletions
-     
+    //  console.log(documents,"documen")
+    console.log(documents,"documents")
 
       const uploadPromises = documents.map((doc) => {
+        console.log("Document being processed:", doc);
         const mimeType = getMimeType(doc);
         return cloudinary.uploader.upload(`data:${mimeType};base64,${doc}`, {
           resource_type: "auto",
@@ -313,11 +318,14 @@ app.post("/update/:id", requireAuth, async (req, res) => {
       });
 
       const uploadResults = await Promise.all(uploadPromises);
-      const documentUrls = uploadResults.map((result) => ({
-        name: customer.documentName || "Document",
-        path: result.secure_url,
-      }));
-
+      const documentUrls = uploadResults.map((result, index) => {
+        return {
+          name: fileNames[index] || "Document",
+          path: result.secure_url,
+        };
+      });
+      
+      console.log(documentUrls);
       leadData.documents = JSON.stringify(documentUrls);
     }
       leadData.assigned_to = customer.assignedTo;
