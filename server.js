@@ -66,6 +66,7 @@ const connectDB = () => {
           gst VARCHAR(20),
           cin VARCHAR(20),
           services JSON NOT NULL,
+          renewservices JSON DEFAULT NULL,
           note TEXT,
           is_customer BOOLEAN DEFAULT FALSE,
           documents TEXT,
@@ -240,6 +241,7 @@ app.post("/update/:id",requireAuth,  async (req, res) => {
     fileNames=[],
     isCustomer,
     credentials = [],
+    renewableServices
   } = req.body;
 
   // Validate required fields
@@ -261,6 +263,7 @@ app.post("/update/:id",requireAuth,  async (req, res) => {
       gst: customer.gst || null,
       cin: customer.cin || null,
       services: JSON.stringify(services),
+      renewservices: JSON.stringify(renewableServices),
       note: customer.note || null,
       is_customer: isCustomer || false,
       clientname: customer.clientName || null,

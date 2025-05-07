@@ -1,121 +1,663 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Customer Details</title>
-    <link rel="stylesheet" href="/admin/css/styles.css">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Edit Lead - TAXMIS</title>
+    <link rel="stylesheet" href="/admin/css/styles.css" />
     <style>
-        body {
-            font-family: 'Arial', sans-serif;
-            background-color: #f4f7fa;
-            color: #333;
-            margin: 0;
-            padding: 0;
-        }
+      body {
+        display: flex;
+        margin: 0;
+        min-height: 100vh;
+      }
+      form {
+        width: 100%;
+        max-width: 800px;
+        margin: 0 auto;
+        background: white;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      }
+      .form-row {
+        display: flex;
+        flex-wrap: wrap;
+        margin-bottom: 15px;
+        gap: 20px;
+      }
+      .form-group {
+        flex: 1;
+        min-width: 250px;
+      }
+      label {
+        display: block;
+        margin-bottom: 5px;
+        font-weight: bold;
+      }
+      input,
+      select,
+      textarea {
+        width: 100%;
 
-        .container {
-            max-width: 800px;
-            margin: 50px auto;
-            padding: 30px;
-            border: 1px solid #007BFF;
-            border-radius: 8px;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-            background-color: #fff;
-        }
-
-        h1 {
-            color: #007BFF;
-            text-align: center;
-            margin-bottom: 30px;
-            font-size: 28px;
-            font-weight: bold;
-        }
-
-        .customer-detail {
-            margin: 15px 0;
-            padding: 20px;
-            border: 1px solid #007BFF;
-            border-radius: 5px;
-            background-color: #f9f9f9;
-            transition: background-color 0.3s;
-        }
-
-        .customer-detail:hover {
-            background-color: #e9f5ff;
-        }
-
-        .document-link {
-            display: block;
-            margin: 5px 0;
-            color: #007BFF;
-            text-decoration: none;
-            transition: color 0.3s;
-        }
-
-        .document-link:hover {
-            color: #0056b3;
-            text-decoration: underline;
-        }
-
-        @media (max-width: 600px) {
-            .container {
-                padding: 20px;
-            }
-
-            h1 {
-                font-size: 24px;
-            }
-
-            .customer-detail {
-                padding: 15px;
-            }
-        }
+        padding: 8px;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+      }
+      button {
+        background: #0056b3;
+        display:none;
+        color: white;
+        border: none;
+        padding: 10px 15px;
+        border-radius: 4px;
+        cursor: pointer;
+        margin-top: 20px;
+      }
+      .service-item {
+        display: flex;
+        align-items: center;
+        margin-bottom: 10px;
+        background: #f8f8f8;
+        padding: 10px;
+        border-radius: 4px;
+      }
+      .service-item button {
+        margin-left: 10px;
+        margin-top: 0;
+        background: #dc3545;
+      }
     </style>
-</head>
-<body>
-    <div class="container">
-        <h1>Customer Details</h1>
-        <div id="customer-info"></div>
+  </head>
+  <body>
+    <div class="sidebar">
+      <h2>Lead Details</h2>
+      <ul>
+        <li onclick="location.href='/dashboard'">Dashboard</li>
+        <li onclick="location.href='/new-leads'">New Leads</li>
+        <li onclick="location.href='/customers'">Customer</li>
+        <li onclick="location.href='/add-services'">Add Services</li>
+      </ul>
     </div>
-    <script>
-        async function fetchCustomerData() {
-            document.getElementById('customer-info').innerHTML = `
-                <div style="text-align: center; padding: 20px;">
-                    <h3>Loading...</h3>
-                </div>
-            `;
-   
-            const urlParts = window.location.pathname.split('/');
-            const customerId = urlParts[urlParts.length - 1]; // Extract ID from URL
-            const response = await fetch(`/api/lead/${customerId}`);
-            
-            if (response.ok) {
-                const lead = await response.json();
-                if (!lead || Object.keys(lead).length === 0) {
-                    document.getElementById('customer-info').innerHTML = `
-                        <div style="text-align: center; padding: 20px;">
-                            <h3>Nothing To Show Here.</h3>
-                        </div>
-                    `;
-                } else {
-                    displayCustomerData(lead);
-                }
-            } else {
-                console.error('Failed to fetch customer data');
-                document.getElementById('customer-info').innerHTML = `
-                    <div style="text-align: center; padding: 20px;">
-                        <h3>Failed to load customer data.</h3>
-                    </div>
-                `;
-            }
-        }
 
-        function displayCustomerData(lead) {
-            const customerInfoDiv = document.getElementById('customer-info');
-            
-            // Parse the documents string into an object
-            const documents = lead.documents ? JSON.parse(lead.documents) : [];
+    <div class="main-content">
+      <div class="header">
+        <h2>Edit Lead</h2>
+        <a href="/logout" class="logout-btn">Logout</a>
+      </div>
+
+      <form id="editLeadForm">
+        <div class="form-row">
+          <div class="form-group">
+            <label for="customerName">Customer Name:</label>
+            <input readonly  type="text" id="customerName" name="customerName" required />
+          </div>
+          <div class="form-group">
+            <label for="mobile">Mobile No:</label>
+            <input readonly  type="tel" id="mobile" name="mobile" required />
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="fatherName">Father's Name:</label>
+            <input readonly  type="text" id="fatherName" name="fatherName" />
+          </div>
+          <div class="form-group">
+            <label for="spouseName">Spouse Name:</label>
+            <input readonly  type="text" id="spouseName" name="spouseName" />
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="motherName">Mother's Name:</label>
+            <input readonly  type="text" id="motherName" name="motherName" />
+          </div>
+          <div class="form-group">
+            <label for="aadhar">Aadhar Card No:</label>
+            <input readonly  type="text" id="aadhar" name="aadhar" />
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="pan">PAN No:</label>
+            <input readonly  type="text" id="pan" name="pan" />
+          </div>
+          <div class="form-group">
+            <label for="company">Company Name:</label>
+            <input readonly  type="text" id="company" name="company" />
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="email">Email ID:</label>
+            <input readonly  type="email" id="email" name="email" required />
+          </div>
+          <div class="form-group">
+            <label for="gst">GST No:</label>
+            <input readonly  type="text" id="gst" name="gst" />
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="cin">CIN No:</label>
+            <input readonly  type="text" id="cin" name="cin" />
+          </div>
+        </div>
+        <div class="form-row" style="display: none">
+          <div class="form-group">
+            <label for="clientName">Client Name:</label>
+            <input readonly  type="text" id="clientName" name="clientName" />
+          </div>
+          <div class="form-group">
+            <label for="clientEmail">Client Email:</label>
+            <input readonly  type="email" id="clientEmail" name="clientEmail" />
+          </div>
+          <div class="form-group">
+            <label for="clientMobile">Client Mobile No:</label>
+            <input readonly  type="tel" id="clientMobile" name="clientMobile" />
+          </div>
+        </div>
+
+        <div
+          style="
+            border: 1px dotted black;
+            padding: 10px;
+            margin-bottom: 25px;
+            display: none;
+          "
+          id="credential"
+        >
+          <div class="form-row" style="display: none; margin: 0">
+            <div
+              class="form-group"
+              style="display: flex; justify-content: space-between"
+            >
+              <label>Credentials:</label>
+              <button disabled
+                type="button"
+                style="margin-top: 0"
+                onclick="addCredentialField()"
+              >
+                Add Field
+              </button>
+            </div>
+          </div>
+
+          <table
+            id="credentialsTable"
+            style="
+              width: 100%;
+              margin: 0;
+              border-collapse: collapse;
+              display: none;
+            "
+          >
+            <thead>
+              <tr>
+                <th>URL</th>
+                <th>Username</th>
+                <th>Password</th>
+                <th style="display: none;">Action</th>
+              </tr>
+            </thead>
+            <tbody id="credentialsBody">
+              <!-- Dynamic credential rows will be added here -->
+            </tbody>
+          </table>
+        </div>
+        <div
+          style="border: 1px dotted black; padding: 10px; margin-bottom: 25px"
+        >
+          <div class="form-row"  style=" display:none;">
+            <div class="form-group">
+              <label for="services">Add Services:</label>
+              <select id="services" name="services">
+                <option value="GST Filing">GST Filing</option>
+                <option value="Company Registration">
+                  Company Registration
+                </option>
+                <option value="Tax Consultancy">Tax Consultancy</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label for="servicePrice">Service Price:</label>
+              <input
+                type="number"
+                id="servicePrice"
+                name="servicePrice"
+                min="0"
+                step="0.01"
+              />
+            </div>
+            <div class="form-group" style="flex-basis: 100%">
+              <button disabled type="button" onclick="addService()" style="margin: 0">
+                Add Service
+              </button>
+            </div>
+          </div>
+          <label for="services"> Services:</label>
+          <div id="selectedServices"></div>
+        </div>
+<!-- //renew services -->
+
+<div style="border: 1px dotted black; padding: 10px; margin-bottom: 25px; display:none" id="renewservices">
+  <div class="form-row"  style=" display:none;">
+    <div class="form-group" style="display: flex; justify-content: space-between; align-items: center;">
+      <button disabled type="button" onclick="addRenewServicesField()">Add Renewable Service</button>
+    </div>
+    
+    <!-- Dropdown Inputs -->
+    <div style="margin-top: 15px; display: flex; gap: 15px;">
+      <select id="serviceName">
+        <option value="" disabled selected>Select Service</option>
+        
+      </select>
+      
+      <select id="renewFrequency">
+        <option value="" disabled selected>Select Frequency</option>
+        <option value="Monthly">Monthly</option>
+        <option value="Quarterly">Quarterly</option>
+        <option value="Half-Yearly">Half-Yearly</option>
+        <option value="Annually">Annually</option>
+      </select>
+      
+      <input readonly  type="date" id="renewDate" />
+    </div>
+  </div>
+  
+  <!-- Table -->
+  <label><strong>Renewable Services</strong></label>
+  <table id="renewServiceTable" style="width: 100%; margin-top: 20px; border-collapse: collapse; border: 1px solid #ccc;">
+    <thead>
+      <tr>
+        <th style="border: 1px solid #ccc; padding: 8px;">Service Name</th>
+        <th style="border: 1px solid #ccc; padding: 8px;">Due in Days</th>
+        
+        <th style="border: 1px solid #ccc; padding: 8px; display: none;">Due Date</th>
+        <th style="border: 1px solid #ccc; padding: 8px;">Due Date</th>
+        <th style="border: 1px solid #ccc; padding: 8px; display: none;">Action</th>
+      </tr>
+    </thead>
+    
+    <tbody id="renewServiceBody">
+      <!-- Dynamic rows appear here -->
+    </tbody>
+  </table>
+</div>
+
+<!-- //document  -->
+
+        <div class="form-row" style="display: none">
+          <div class="form-group" style="flex-basis: 100%">
+            <label>Documents:</label>
+            <button disabled type="button" onclick="addFileField()">Add File</button>
+          </div>
+        </div>
+
+        <div id="fileInputsContainer" style="display: none"></div>
+
+        <div class="form-row" style="margin-top: 25px">
+          <div class="form-group" style="flex-basis: 100%">
+            <label for="note">Note:</label>
+            <textarea  disabled id="note" name="note" rows="3"></textarea>
+          </div>
+        </div>
+
+        <div class="form-row" id="customerDetails" style="display: none">
+          <div class="form-group">
+            <label for="assignedTo">Assigned Employee:</label>
+            <input readonly  type="text" id="assignedTo" name="assignedTo" />
+          </div>
+          <div class="form-group">
+            <label for="deliveryDate">Date of Delivery:</label>
+            <input readonly  type="date" id="deliveryDate" name="deliveryDate" />
+          </div>
+        </div>
+
+        <button disabled type="submit">Update Lead</button>
+      </form>
+    </div>
+
+    <script>
+      let services = [];
+      let leadId;
+      let credentials = [];
+
+
+
+      //renew service 
+      
+
+      function addRenewServicesField() {
+  const name = document.getElementById("serviceName").value;
+  const freq = document.getElementById("renewFrequency").value;
+  const dateInput = document.getElementById("renewDate").value;
+
+  if (!name || !freq || !dateInput) {
+    alert("Please fill in all fields.");
+    return;
+  }
+
+  // Frequency to days mapping
+  const freqDaysMap = {
+    "Monthly": 30,
+    "Quarterly": 90,
+    "Half-Yearly": 182,
+    "Annually": 365
+  };
+
+  let dueInDays = freqDaysMap[freq];
+  
+  const dueDate = new Date(dateInput);
+
+  // Format due date
+  const dueDateStr = dueDate.toLocaleDateString("en-GB", {
+    day: "2-digit", month: "short", year: "2-digit"
+  });
+  
+  
+  // Calculate GST date (30 days after due date)
+  const gstDate = new Date(dueDate);
+  const today = new Date();
+  gstDate.setDate(gstDate.getDate() + dueInDays);
+  const msInDay = 24 * 60 * 60 * 1000;
+   dueInDays = Math.max(Math.round((gstDate - today) / msInDay), 0);
+  const gstDateStr = gstDate.toLocaleDateString("en-GB", {
+    day: "2-digit", month: "short", year: "2-digit"
+  });
+
+  const table = document.getElementById("renewServiceTable");
+  const tbody = document.getElementById("renewServiceBody");
+
+  // Show table if hidden
+  table.style.display = "table";
+
+  const row = document.createElement("tr");
+
+  row.innerHTML = `
+    <td style="border: 1px solid #ccc; padding: 8px;">${name}</td>
+    <td style="border: 1px solid #ccc; padding: 8px; ">${dueInDays} days</td>
+    <td style="border: 1px solid #ccc; padding: 8px;display: none;">${dueDateStr}</td>
+    <td style="border: 1px solid #ccc; padding: 8px;">${gstDateStr}</td>
+    <td style="border: 1px solid #ccc; padding: 8px; display: none;">
+      <button disabled onclick="this.closest('tr').remove()">Remove</button>
+    </td>
+  `;
+
+  tbody.appendChild(row);
+
+  // Reset inputs
+  document.getElementById("serviceName").selectedIndex = 0;
+  document.getElementById("renewFrequency").selectedIndex = 0;
+  document.getElementById("renewDate").value = "";
+}
+
+     
+ function removeRenewServicesField(button) {
+        const row = button.parentNode.parentNode;
+        row.parentNode.removeChild(row);
+      }
+
+
+
+
+      function allservices() {
+        let allservice = [
+          "PAN Correction",
+          "PAN Application",
+          "TAN Application",
+          "PF Transfer",
+          "PF Withdrawal",
+          "PF KYC",
+          "PF Return",
+          "ESI Return",
+          "Income Tax Return",
+          "Financial Statement Preparation",
+          "Company Formation",
+          "Post Incorporation Services",
+          "Annual Compliance",
+          "LLP Formation",
+          "Partnership Firm Registration",
+          "Trust Registration",
+          "80G Application",
+          "12A Application",
+          "Darpan Registration",
+          "GST Registration",
+          "GSTR-1",
+          "GSTR-3B",
+          "CMP-08",
+          "GST Closure",
+          "GST Final Return",
+          "GST Amendment",
+          "Rent Agreement",
+          "Affidavit",
+          "Notary Services",
+          "Sale Agreement",
+          "Sale Deed",
+          "Rectification Deed",
+          "Gift Deed",
+          "MOU",
+          "Discharge Deed",
+          "DTD-Deposit of Title Deed",
+          "HUF-Deed",
+          "Partition Deed",
+          "Partnership Deed",
+          "Amendment in Partnership Deed",
+          "FSSAI Registration",
+          "ISO Certification",
+          "Karnataka Shop and Establishment Registration",
+          "UDYAM",
+          "Trade Licence",
+          "Auditing",
+          "RWA Formation",
+          "School Establishment",
+          "Professional Tax Registration",
+          "PF Registration",
+          "ESI Registration",
+          "Legal Verification of Property",
+          "Khata Transfer",
+          "Khata Making",
+          "EC Application",
+          "Trademark Registration",
+          "Passport Services",
+          "BESCOM Name Transfer",
+          "PSARA Licence",
+          "Import Export Code",
+          "Name Change Services",
+          "RERA Licence",
+          "TDS Payment 26QB",
+          "TDS Return for NRI Cases",
+          "Form 15CA/CB",
+          "Digital Signature",
+          "Estamp Services",
+          "Marriage Registration",
+          "Project Report",
+          "Aadhar Changes",
+        ];
+        let service = document.getElementById("services");
+let renew = document.getElementById("serviceName");
+
+allservice.forEach((s) => {
+  const option1 = document.createElement("option");
+  option1.value = s;
+  option1.textContent = s;
+  service.appendChild(option1);
+
+  const option2 = document.createElement("option");
+  option2.value = s;
+  option2.textContent = s;
+  renew.appendChild(option2);
+});
+}
+      allservices();
+      function addFileField() {
+        const fileInput = document.createElement("input");
+        fileInput.type = "file";
+        fileInput.name = "documents";
+        fileInput.accept = ".pdf,image/*";
+        fileInput.style.marginTop = "10px";
+        fileInput.required = true; // Optional: make it required if needed
+
+        const fileName = document.createElement("input");
+        fileName.type = "text";
+        fileName.placeholder = "Name of file";
+        fileName.name = "fileName";
+        fileName.style.marginTop = "10px";
+        fileName.required = true;
+
+        const removeButton = document.createElement("button");
+        removeButton.type = "button";
+        removeButton.innerText = "Remove";
+        removeButton.onclick = function () {
+          fileInput.parentNode.remove();
+        };
+
+        const container = document.getElementById("fileInputsContainer");
+        const fileRow = document.createElement("div");
+        fileRow.appendChild(fileInput);
+        fileRow.appendChild(fileName);
+        fileRow.appendChild(removeButton);
+        container.appendChild(fileRow);
+      }
+
+      function addCredentialField() {
+        const credentialRow = document.createElement("tr");
+        credentialRow.innerHTML = `
+    <td><input readonly  type="text" class="credential-url" placeholder="Enter URL"></td>
+    <td><input readonly  type="text" class="credential-username" placeholder="Enter Username"></td>
+    <td><input readonly  type="text" class="credential-password" placeholder="Enter Password"></td>
+    <td><button type="button" onclick="removeCredentialField(this)">Remove</button></td>
+  `;
+        document.getElementById("credentialsBody").appendChild(credentialRow);
+      }
+
+      function removeCredentialField(button) {
+        const row = button.parentNode.parentNode;
+        row.parentNode.removeChild(row);
+      }
+
+
+     
+      document.addEventListener("DOMContentLoaded", async function () {
+        try {
+          const urlParts = window.location.pathname.split("/");
+          leadId = urlParts[urlParts.length - 1];
+
+          const response = await fetch(`/api/lead/${leadId}`);
+          if (!response.ok) {
+            throw new Error("Failed to fetch lead data");
+          }
+
+          const lead = await response.json();
+          console.log(lead)
+          document.getElementById("customerName").value = lead.customer_name;
+          document.getElementById("mobile").value = lead.mobile;
+          document.getElementById("fatherName").value = lead.father_name || "";
+          document.getElementById("spouseName").value = lead.spouse_name || "";
+          document.getElementById("motherName").value = lead.mother_name || "";
+          document.getElementById("aadhar").value = lead.aadhar || "";
+          document.getElementById("pan").value = lead.pan || "";
+          document.getElementById("company").value = lead.company_name || "";
+          document.getElementById("email").value = lead.email;
+          document.getElementById("gst").value = lead.gst || "";
+          document.getElementById("cin").value = lead.cin || "";
+          document.getElementById("note").value = lead.note || "";
+          
+          if (lead.is_customer) {
+            console.log(lead);
+            // Show customer details
+
+            document.getElementById("credential").style.display = "block";
+            document.getElementById("customerDetails").style.display = "block";
+            document.getElementById("assignedTo").value =
+              lead.assigned_to || "";
+            document.getElementById("deliveryDate").value = lead.delivery_date
+              ? new Date(lead.delivery_date).toISOString().split("T")[0]
+              : "";
+
+            // Show client details section
+            document
+              .querySelector("#clientName")
+              .closest(".form-row").style.display = "flex";
+            document.querySelector("#clientName").value = lead.clientname;
+            document.querySelector("#clientEmail").value = lead.clientemail;
+            document.querySelector("#clientMobile").value =
+              lead.clientmobilenumber;
+
+              //show renew serice
+              document
+              // .querySelector('button[onclick="addRenewServicesField()"]')
+              // .closest(".form-row").style.display = "flex";
+            document.getElementById("renewservices").style.display = "block";
+             
+            const renewservices = lead.renewservices || [];
+for (let i = 0; i < renewservices.length; i++) {
+  const { serviceName, gst,dueDate } = renewservices[i];
+// console.log(serviceName, gst,dueDate)
+  const dueDateObj = new Date(dueDate); // e.g. "06 May 25"
+  const gstDateObj = new Date(gst);     // e.g. "05 Jun 25"
+
+  // Normalize both dates to midnight
+  gstDateObj.setHours(0, 0, 0, 0);
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+// console.log(gstDateObj)
+  // Calculate diff
+  const msInDay = 24 * 60 * 60 * 1000;
+  const diffInDays = Math.max(Math.round((gstDateObj - today) / msInDay), 0);
+// console.log((gstDateObj - today))
+// 
+
+  // Create and append row
+  const row = document.createElement("tr");
+  row.innerHTML = `
+    <td style="border: 1px solid #ccc; padding: 8px;">${serviceName}</td>
+    <td style="border: 1px solid #ccc; padding: 8px;">${diffInDays} days</td>
+    <td style="border: 1px solid #ccc; padding: 8px;display: none;">${dueDate}</td>
+    <td style="border: 1px solid #ccc; padding: 8px;">${gst}</td>
+    <td style="border: 1px solid #ccc; padding: 8px; display: none;">
+      <button disabled onclick="this.closest('tr').remove()">Remove</button>
+    </td>
+  `;
+  document.getElementById("renewServiceBody").appendChild(row);
+}
+
+
+
+              
+            // Show credentials section
+
+            document
+              .querySelector('button[onclick="addCredentialField()"]')
+              .closest(".form-row").style.display = "flex";
+            document.getElementById("credentialsTable").style.display = "table";
+            let credential = JSON.parse(lead.credentials);
+            console.log(credential?.length);
+            for (let i = 0; i < credential?.length; i++) {
+              const credentialRow = document.createElement("tr");
+              credentialRow.innerHTML = `
+    <td><input readonly  type="text" class="credential-url" placeholder="Enter URL" value=${credential[i].url}></td>
+    <td><input readonly  type="text" class="credential-username" placeholder="Enter Username" value=${credential[i].username}></td>
+    <td><input readonly  type="text" class="credential-password" placeholder="Enter Password" value=${credential[i].password}></td>
+    <td><button type="button" onclick="removeCredentialField(this)">Remove</button></td>
+  `;
+              document
+                .getElementById("credentialsBody")
+                .appendChild(credentialRow);
+            }
+            // Show documents section
+            document
+              .querySelector('button[onclick="addFileField()"]')
+              .closest(".form-row").style.display = "flex";
+            document.getElementById("fileInputsContainer").style.display =
+              "block";
+              const documents = lead.documents ? JSON.parse(lead.documents) : [];
             
             let documentLinks = '';
             if (documents.length > 0) {
@@ -125,34 +667,155 @@
             } else {
                 documentLinks = 'N/A';
             }
+            document.getElementById("fileInputsContainer").innerHTML=documentLinks
+          }
 
-            customerInfoDiv.innerHTML = `
-                <div class="customer-detail "><strong>ID:</strong> ${lead.id || 'N/A'}</div>
-                <div class="customer-detail"><strong>Name:</strong> ${lead.customer_name || 'N/A'}</div>
-                <div class="customer-detail"><strong>Mobile:</strong> ${lead.mobile || 'N/A'}</div>
-                <div class="customer-detail"><strong>Father's Name:</strong> ${lead.father_name || 'N/A'}</div>
-                <div class="customer-detail"><strong>Spouse's Name:</strong> ${lead.spouse_name || 'N/A'}</div>
-                <div class="customer-detail"><strong>Mother's Name:</strong> ${lead.mother_name || 'N/A'}</div>
-                <div class="customer-detail"><strong>Aadhar:</strong> ${lead.aadhar || 'N/A'}</div>
-                <div class="customer-detail"><strong>PAN:</strong> ${lead.pan || 'N/A'}</div>
-                <div class="customer-detail"><strong>Company Name:</strong> ${lead.company_name || 'N/A'}</div>
-                <div class="customer-detail"><strong>Email:</strong> ${lead.email || 'N/A'}</div>
-                <div class="customer-detail"><strong>GST:</strong> ${lead.gst || 'N/A'}</div>
-                <div class="customer-detail"><strong>CIN:</strong> ${lead.cin || 'N/A'}</div>
-                <div class="customer-detail"><strong>Note:</strong> ${lead.note || 'N/A'}</div>
-                <div class="customer-detail"><strong>Assigned To:</strong> ${lead.assigned_to || 'N/A'}</div>
-                <div class="customer-detail"><strong>Delivery Date:</strong> ${lead.delivery_date ? new Date(lead.delivery_date).toLocaleDateString() : 'N/A'}</div>
-                <div class="customer-detail"><strong>Created At:</strong> ${lead.created_at ? new Date(lead.created_at).toLocaleDateString() : 'N/A'}</div>
-                <div class="customer-detail"><strong>Is Customer:</strong> ${lead.is_customer ? 'Yes' : 'No'}</div>
-                <div class="customer-detail"><strong>Documents:</strong> ${documentLinks}</div>
-                <div class="customer-detail"><strong>Services:</strong> ${lead.services && lead.services.length > 0 ? lead.services.map(service => `${service.name} - ₹${service.price}`).join(', ') : 'N/A'}</div>
-                <div class="customer-detail"><strong>Client Name:</strong> ${lead.clientname || 'N/A'}</div>
-                <div class="customer-detail"><strong>Client Mobile Number:</strong> ${lead.clientmobilenumber || 'N/A'}</div>
-                <div class="customer-detail"><strong>Client Email:</strong> ${lead.clientemail || 'N/A'}</div>
-                <div class="customer-detail"><strong>Credentials:</strong> ${lead.credentials ? JSON.parse(lead.credentials).map(cred => `URL: ${cred.url}, Username: ${cred.username}, Password: ${cred.password}`).join('<br>') : 'N/A'}</div>
-            `;
+          services =
+            typeof lead.services === "string"
+              ? JSON.parse(lead.services)
+              : lead.services;
+          updateServiceDisplay();
+        } catch (error) {
+          console.error("Error loading lead data:", error);
+          alert("Failed to load lead data. Please try refreshing the page.");
         }
-        fetchCustomerData();
+      });
+
+      function addService() {
+        const serviceSelect = document.getElementById("services");
+        const priceInput = document.getElementById("servicePrice");
+
+        if (!priceInput.value || isNaN(priceInput.value)) {
+          alert("Please enter a valid price");
+          return;
+        }
+
+        const service = {
+          name: serviceSelect.options[serviceSelect.selectedIndex].text,
+          price: parseFloat(priceInput.value).toFixed(2),
+        };
+
+        services.push(service);
+        updateServiceDisplay();
+        priceInput.value = "";
+      }
+
+      function removeService(index) {
+        services.splice(index, 1);
+        updateServiceDisplay();
+      }
+
+      function updateServiceDisplay() {
+        const container = document.getElementById("selectedServices");
+        container.innerHTML = "";
+
+        services.forEach((service, index) => {
+          const div = document.createElement("div");
+          div.className = "service-item";
+          div.innerHTML = `
+          <span>${service.name} - ₹${service.price}</span>
+          <button disabled type="button" onclick="removeService(${index})">Remove</button>
+        `;
+          container.appendChild(div);
+        });
+      }
+
+      document
+        .getElementById("editLeadForm")
+        .addEventListener("submit", async function (e) {
+          e.preventDefault();
+          const submitButton = document.querySelector('button[type="submit"]');
+          submitButton.innerHTML = "Working on it...";
+          submitButton.disabled = true;
+
+          try {
+            const formData = new FormData(this);
+            const customer = {};
+            const isCustomer =
+              document.getElementById("customerDetails").style.display ===
+              "block";
+            const files = document.querySelectorAll(
+              'input[type="file"][name="documents"]'
+            );
+            const filesname = document.querySelectorAll(
+              'input[type="text"][name="fileName"]'
+            );
+            const base64Files = [];
+            const fileNames = [];
+            // Convert files to Base64
+            const readFile = (file) => {
+              return new Promise((resolve, reject) => {
+                const reader = new FileReader();
+                reader.onloadend = () => {
+                  const base64String = reader.result.split(",")[1];
+                  resolve(base64String);
+                };
+                reader.onerror = reject;
+                reader.readAsDataURL(file);
+              });
+            };
+
+            for (let fileInput of files) {
+              if (fileInput.files.length > 0) {
+                const base64String = await readFile(fileInput.files[0]);
+                base64Files.push(base64String);
+              }
+            }
+
+            filesname.forEach((f) => {
+              // console.log(f.value.length,f.value,'inside loop')
+              if (f.value.length > 0) {
+                fileNames.push(f.value);
+              }
+            });
+            console.log(fileNames);
+
+            for (const [key, value] of formData.entries()) {
+              customer[key] = value;
+            }
+
+            const credentialRows = document.querySelectorAll(
+              "#credentialsBodfy tr"
+            );
+            credentialRows.forEach((row) => {
+              const url = row.querySelector(".credential-url").value;
+              const username = row.querySelector(".credential-username").value;
+              const password = row.querySelector(".credential-password").value;
+              if (url && username && password) {
+                credentials.push({ url, username, password });
+              }
+            });
+
+
+
+
+            const renewableServices = [];
+const renewRows = document.querySelectorAll("#renewServiceBody tr");
+
+renewRows.forEach((row) => {
+  const serviceName = row.children[0]?.innerText.trim();
+  const dueInDays = row.children[1]?.innerText.trim();
+  const dueDate = row.children[2]?.innerText.trim();
+  const gst = row.children[3]?.innerText.trim();
+
+  if (serviceName && dueInDays && dueDate && gst) {
+    renewableServices.push({
+      serviceName,
+      dueInDays,
+      dueDate,
+      gst,
+    });
+  }
+});
+
+} catch (error) {
+            console.error("Error:", error);
+            alert(`Failed to update lead: ${error.message}`);
+          } finally {
+            submitButton.innerHTML = "Update Lead";
+            submitButton.disabled = false;
+          }
+        });
     </script>
-</body>
+  </body>
 </html>
